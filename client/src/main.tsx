@@ -1,9 +1,15 @@
-import React from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import ErrorPage from "./error-page.tsx";
 import ReactDOM from "react-dom/client";
-import App from "./App.tsx";
+import Root from "./routes/root.tsx";
+import React from "react";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Root />} errorElement={<ErrorPage />} />
+      </Routes>
+    </BrowserRouter>
   </React.StrictMode>,
 );

@@ -10,7 +10,7 @@ const port = process.env.PORT || 3000;
 
 app.use(cors());
 
-app.get("/api/home", (req: Request, res: Response) => {
+app.get("/api/easteregg", (req: Request, res: Response) => {
   res.json({ message: "Hello World!" });
 });
 

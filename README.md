@@ -1,1 +1,1 @@
-# React + TypeScript + Vite + Express
+# React.Js + Express.Js (Typescript & Vite)

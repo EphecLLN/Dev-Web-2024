@@ -10,7 +10,7 @@ interface User {
   updatedAt: string;
 }
 
-function App() {
+function Dashboard() {
   const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
@@ -26,7 +26,7 @@ function App() {
 
   return (
     <main>
-      <h1>Users</h1>
+      <h1>Dashboard : Users</h1>
       <ul>
         {users.map((user: User) => (
           <li key={user.id}>
@@ -40,4 +40,4 @@ function App() {
   );
 }
 
-export default App;
+export default Dashboard;

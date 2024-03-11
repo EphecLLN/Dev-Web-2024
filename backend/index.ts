@@ -1,6 +1,5 @@
 import express, { Express, Request, Response } from "express";
 import usersRoutes from "./routes/users";
-// import prisma from "./prisma/prisma";
 
 const app: Express = express();
 const port = process.env.PORT || 8000;

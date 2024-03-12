@@ -5,9 +5,9 @@ interface User {
   id: string;
   email: string;
   username: string;
-  avatarUrl: string;
-  createdAt: string;
-  updatedAt: string;
+  avatar_url: string;
+  created_at: Date;
+  updated_at: Date;
 }
 
 function Dashboard() {
@@ -30,7 +30,7 @@ function Dashboard() {
       <ul>
         {users.map((user: User) => (
           <li key={user.id}>
-            <a href={user.avatarUrl} target="_blank" rel="noreferrer">
+            <a href={user.avatar_url} target="_blank" rel="noreferrer">
               {user.username}{" "}
             </a>
           </li>

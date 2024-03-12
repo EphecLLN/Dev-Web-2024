@@ -1,11 +1,11 @@
 import express, { Router, Request, Response } from "express";
-import prisma from "../prisma/prisma";
+import db from "../db/drizzle";
 
 const router: Router = express.Router();
 
 router.get("/", async (req: Request, res: Response) => {
   try {
-    const user = await prisma.user.findMany();
+    const user = await db.query.users.findMany();
 
     if (!user) {
       return res.status(404).json({ message: "No user found" });

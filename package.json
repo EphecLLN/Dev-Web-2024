@@ -1,8 +1,13 @@
 {
-    "scripts": {
-      "dev": "concurrently -n \"BACK,FRONT\" -c \"white,blue\" -p \"[{name}]\"  \"cd backend && npm run dev\" \"cd frontend && npm run dev\" "
-    },
-    "devDependencies": {
-      "concurrently": "^8.2.2"
-    }
+  "scripts": {
+    "start-all": "concurrently -n \"BACK,FRONT\" -c \"yellow,blue\" \"npm run start-backend\" \"npm run start-frontend\"",
+    "start-backend": "cd backend && npm run dev",
+    "start-frontend": "cd frontend && npm run dev",
+    "install-all": "npm i && concurrently -n \"BACK,FRONT\" -c \"yellow,blue\" \"npm run install-backend\" \"npm run install-frontend\"",
+    "install-backend": "cd backend && npm install && cd ..",
+    "install-frontend": "cd frontend && npm install && cd .."
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
   }
+}

@@ -18,7 +18,10 @@ function User() {
           <strong>Email:</strong> {user.email}
         </li>
         <li>
-          <strong>Avatar URL:</strong> {user.avatar_url}
+          <strong>Avatar URL:</strong>{" "}
+          <a href={user.avatar_url} target="_blank" rel="noopener noreferrer">
+            {user.avatar_url}
+          </a>
         </li>
         <li>
           <strong>Created At:</strong> {user.created_at.toString()}

@@ -1,5 +1,6 @@
 import { Outlet, Link } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 function Root() {
   return (
@@ -9,6 +10,7 @@ function Root() {
       </div>
       <hr />
       <Outlet />
+      <ReactQueryDevtools />
       <TanStackRouterDevtools />
     </>
   );

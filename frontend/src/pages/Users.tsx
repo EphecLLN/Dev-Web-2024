@@ -2,7 +2,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { UserType, usersQueryOptions } from "../fetchUsers";
 import { Link } from "@tanstack/react-router";
 import { userRoute } from "../App";
-import { Outlet } from "react-router-dom";
+import { Outlet } from "@tanstack/react-router";
 
 function Users() {
   const { data, isLoading, isError } = useSuspenseQuery(usersQueryOptions);

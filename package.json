@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start-all": "concurrently -n \"BACK,FRONT\" -c \"yellow,blue\" \"npm run start-backend\" \"npm run start-frontend\"",
+    "all": "concurrently -n \"BACK,FRONT\" -c \"yellow,blue\" \"npm run start-backend\" \"npm run start-frontend\"",
     "start-backend": "cd backend && npm run dev",
     "start-frontend": "cd frontend && npm run dev",
     "install-all": "npm i && concurrently -n \"BACK,FRONT\" -c \"yellow,blue\" \"npm run install-backend\" \"npm run install-frontend\"",

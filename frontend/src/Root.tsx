@@ -1,8 +1,16 @@
+import { Outlet, Link } from "@tanstack/react-router";
+import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+
 function Root() {
   return (
-    <main>
-      <h1>Tournaments Home</h1>
-    </main>
+    <>
+      <div>
+        <Link to="/">Home</Link> <Link to="/users">Users</Link>
+      </div>
+      <hr />
+      <Outlet />
+      <TanStackRouterDevtools />
+    </>
   );
 }
 

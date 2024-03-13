@@ -6,6 +6,9 @@ const router: Router = express.Router();
 // Fetch all users
 router.get("/", async (req: Request, res: Response) => {
   try {
+    // Wait 500ms to simulate a slow network
+    await new Promise((r) => setTimeout(r, 500));
+
     const users = await db.query.users.findMany();
 
     if (!users.length) {
@@ -24,6 +27,9 @@ router.get("/:userId", async (req: Request, res: Response) => {
   const userId = parseInt(req.params.userId);
 
   try {
+    // Wait 500ms to simulate a slow network
+    await new Promise((r) => setTimeout(r, 500));
+
     const user = await db.query.users.findFirst({
       where: (user, { eq }) => eq(user.id, userId),
     });

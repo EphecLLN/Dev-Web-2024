@@ -10,8 +10,6 @@ import Root from "./Root.tsx";
 import Index from "./pages/Index.tsx";
 import Users from "./pages/Users.tsx";
 import User from "./pages/User.tsx";
-import { userQueryOptions, usersQueryOptions } from "./fetchUsers.ts";
-import ErrorPage from "./pages/ErrorPage.tsx";
 import UserIndex from "./pages/UserIndex.tsx";
 
 const rootRoute = createRootRouteWithContext<{
@@ -28,10 +26,10 @@ export const indexRoute = createRoute({
 
 export const usersRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: "/users",
-  errorComponent: ErrorPage,
-  loader: ({ context: { queryClient } }) =>
-    queryClient.ensureQueryData(usersQueryOptions),
+  path: "users",
+  // errorComponent: ErrorPage,
+  // loader: ({ context: { queryClient } }) =>
+  //   queryClient.ensureQueryData(usersQueryOptions),
   component: Users,
 });
 
@@ -44,9 +42,9 @@ export const userIndexRoute = createRoute({
 export const userRoute = createRoute({
   getParentRoute: () => usersRoute,
   path: "$userId",
-  errorComponent: ErrorPage,
-  loader: ({ context: { queryClient }, params: { userId } }) =>
-    queryClient.ensureQueryData(userQueryOptions(userId)),
+  // errorComponent: ErrorPage,
+  // loader: ({ context: { queryClient }, params: { userId } }) =>
+  //   queryClient.ensureQueryData(userQueryOptions(userId)),
   component: User,
 });
 
@@ -58,7 +56,7 @@ const routeTree = rootRoute.addChildren([
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 60 * 5,
+      staleTime: 1000 * 60 * 5, // 5 minutes
     },
   },
 });

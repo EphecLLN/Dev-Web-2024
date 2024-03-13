@@ -1,15 +1,32 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { userQueryOptions } from "../fetchUsers";
 import { userRoute } from "../App";
 
 function User() {
   const { userId } = userRoute.useParams();
-  const userQuery = useSuspenseQuery(userQueryOptions(userId));
+  const userQuery = useQuery(userQueryOptions(userId));
   const user = userQuery.data;
+
+  if (userQuery.isLoading) {
+    return (
+      <div>
+        <h1>Loading...</h1>
+      </div>
+    );
+  }
+
+  if (userQuery.isError || !user) {
+    return (
+      <div>
+        <h1>Something went wrong! User not found.</h1>
+      </div>
+    );
+  }
 
   return (
     <div>
       <h1>User {user.username}</h1>
+      <img src={user.avatar_url} alt={user.username} />
       <ul>
         <li>
           <strong>ID:</strong> {user.id}

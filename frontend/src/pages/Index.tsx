@@ -1,8 +1,8 @@
 function Index() {
   return (
-    <main>
+    <div>
       <h1>Tournaments Home</h1>
-    </main>
+    </div>
   );
 }
 

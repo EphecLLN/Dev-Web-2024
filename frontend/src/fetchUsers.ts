@@ -17,6 +17,12 @@ export const usersQueryOptions = queryOptions({
   queryFn: () => fetchUsers(),
 });
 
+export const userQueryOptions = (userId: string) =>
+  queryOptions({
+    queryKey: ["users", { userId }],
+    queryFn: () => fetchUser(userId),
+  });
+
 export async function fetchUsers(): Promise<UserType[]> {
   console.log("Fetching users...");
   return axios.get<UserType[]>("/api/users").then((res) => res.data);

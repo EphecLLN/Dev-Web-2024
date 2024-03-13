@@ -1,39 +1,44 @@
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { UserType, usersQueryOptions } from "../fetchUsers";
+import { Link } from "@tanstack/react-router";
+import { userRoute } from "../App";
+import { Outlet } from "react-router-dom";
 
 function Users() {
-  const { data, isLoading, isError } = useQuery(usersQueryOptions);
+  const { data, isLoading, isError } = useSuspenseQuery(usersQueryOptions);
   const users = data ?? [];
 
   if (isError) {
     return (
-      <main>
+      <div>
         <h1>Something went wrong!</h1>
-      </main>
+      </div>
     );
   }
 
   if (isLoading) {
     return (
-      <main>
+      <div>
         <h1>Loading...</h1>
-      </main>
+      </div>
     );
   }
 
   return (
-    <main>
+    <div>
       <h1>Users</h1>
       <ul>
         {users.map((user: UserType) => (
           <li key={user.id}>
-            <a href={user.avatar_url} target="_blank" rel="noreferrer">
+            <Link to={userRoute.to} params={{ userId: user.id }}>
+              {" "}
               {user.username}{" "}
-            </a>
+            </Link>
           </li>
         ))}
       </ul>
-    </main>
+      <Outlet />
+    </div>
   );
 }
 

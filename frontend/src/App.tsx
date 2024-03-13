@@ -4,33 +4,53 @@ import {
   RouterProvider,
   createRouter,
   createRoute,
-  createRootRoute,
+  createRootRouteWithContext,
 } from "@tanstack/react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import Root from "./Root.tsx";
 import Index from "./pages/Index.tsx";
 import Users from "./pages/Users.tsx";
+import User from "./pages/User.tsx";
+import { userQueryOptions, usersQueryOptions } from "./fetchUsers.ts";
+import Error from "./pages/Error.tsx";
 
 const queryClient = new QueryClient();
 
-const rootRoute = createRootRoute({
+const rootRoute = createRootRouteWithContext<{
+  queryClient: QueryClient;
+}>()({
   component: Root,
 });
 
-const indexRoute = createRoute({
+export const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/",
   component: Index,
 });
 
-const usersRoute = createRoute({
+export const usersRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/users",
+  errorComponent: Error,
+  loader: ({ context: { queryClient } }) =>
+    queryClient.ensureQueryData(usersQueryOptions),
   component: Users,
 });
 
-const routeTree = rootRoute.addChildren([indexRoute, usersRoute]);
+export const userRoute = createRoute({
+  getParentRoute: () => usersRoute,
+  path: "$userId",
+  errorComponent: Error,
+  loader: ({ context: { queryClient }, params: { userId } }) =>
+    queryClient.ensureQueryData(userQueryOptions(userId)),
+  component: User,
+});
+
+const routeTree = rootRoute.addChildren([
+  usersRoute.addChildren([userRoute]),
+  indexRoute,
+]);
 const router = createRouter({
   routeTree,
   defaultPreload: "intent",

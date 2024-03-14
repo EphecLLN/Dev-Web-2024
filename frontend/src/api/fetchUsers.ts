@@ -1,8 +1,6 @@
 import { queryOptions } from "@tanstack/react-query";
 import axios from "axios";
 
-export class UserNotFoundError extends Error {}
-
 export type UserType = {
   id: string;
   email: string;
@@ -11,6 +9,8 @@ export type UserType = {
   created_at: Date;
   updated_at: Date;
 };
+
+export class UserNotFoundError extends Error {}
 
 export const usersQueryOptions = queryOptions({
   queryKey: ["users"],

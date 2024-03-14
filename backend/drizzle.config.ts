@@ -5,7 +5,11 @@ export default {
   schema: "./db/schema.ts",
   driver: "pg",
   dbCredentials: {
-    connectionString: process.env.DATABASE_URL!,
+    host: "localhost",
+    port: 5432,
+    user: "postgres",
+    password: "password",
+    database: "postgres",
   },
   verbose: true,
   strict: true,

@@ -1,7 +1,7 @@
 import { buttonVariants } from "./ui/button";
 import { MainNav } from "@/components/main-nav";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { CodeXml } from "lucide-react";
+import { GitHubLogoIcon } from "@radix-ui/react-icons";
 
 export function SiteHeader() {
   return (
@@ -36,7 +36,7 @@ export function SiteHeader() {
                   variant: "ghost",
                 })}
               >
-                <CodeXml className="h-5 w-5" />
+                <GitHubLogoIcon className="h-5 w-5" />
                 <span className="sr-only">GitHub</span>
               </div>
             </a>

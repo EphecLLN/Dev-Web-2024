@@ -1,7 +1,9 @@
 import { usersQueryOptions } from "@/api/fetchUsers";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Input } from "@/components/ui/input";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { Search } from "lucide-react";
 
 export const Route = createFileRoute("/users/")({
   component: UsersIndexComponent,
@@ -38,13 +40,21 @@ function UsersIndexComponent() {
       <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
         Here is a list of all users registered
       </h1>
-      <div className="space-y-2 mt-2">
+      <div className="p-4">
+        <form>
+          <div className="relative">
+            <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input placeholder="Search" className="pl-8" />
+          </div>
+        </form>
+      </div>
+      <div className="flex flex-col gap-2 p-4 pt-0">
         {data.map((user) => (
           <Link
             to="/users/$userId"
             params={{ userId: user.id }}
             key={user.id}
-            className="flex items-center"
+            className="flex p-3 items-center rounded-lg border hover:bg-accent"
           >
             <Avatar className="flex h-9 w-9 items-center justify-center space-y-0 border">
               <AvatarImage src={user.avatar_url} alt="Avatar" />

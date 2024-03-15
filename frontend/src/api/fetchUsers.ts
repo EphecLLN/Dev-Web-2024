@@ -6,8 +6,8 @@ export type UserType = {
   email: string;
   username: string;
   avatar_url: string;
-  created_at: Date;
-  updated_at: Date;
+  created_at: string;
+  updated_at: string;
 };
 
 export class UserNotFoundError extends Error {}

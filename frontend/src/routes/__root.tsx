@@ -21,10 +21,10 @@ const ReactQueryDevtoolsProduction = import.meta.env.PROD
 export const Route = createRootRoute({
   component: () => (
     <>
-      <div className="relative flex min-h-screen flex-col">
+      <header>
         <SiteHeader />
         <Outlet />
-      </div>
+      </header>
       <Suspense fallback={null}>
         <TanStackRouterDevtools />
         <ReactQueryDevtoolsProduction />

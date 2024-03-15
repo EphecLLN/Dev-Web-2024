@@ -1,39 +1,87 @@
-import { usersQueryOptions } from "@/api/fetchUsers";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { usersQueryOptions, UserType } from "@/api/fetchUsers";
 import { Input } from "@/components/ui/input";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import { SkeletonList } from "@/components/users/skeleton-list";
+import { UserList } from "@/components/users/user-list";
 import { useQuery } from "@tanstack/react-query";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { Search } from "lucide-react";
+import React, { useEffect, useState } from "react";
+
+const PAGE_SIZE = 8;
+const MAX_VISIBLE_PAGES = 5;
 
 export const Route = createFileRoute("/users/")({
   component: UsersIndexComponent,
 });
 
 function UsersIndexComponent() {
-  const { isPending, isError, data, error } = useQuery(usersQueryOptions);
+  const [search, setSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const { isLoading, isError, data, error } = useQuery(usersQueryOptions);
 
-  if (isPending) {
-    return (
-      <section className="container flex-1 items-center gap-6 pb-8 pt-6 md:py-10">
-        <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
-          Loading...
-        </h1>
-      </section>
-    );
-  }
+  const handleNextPage = () =>
+    setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
+  const handlePrevPage = () =>
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+  const handlePageChange = (page: number) => setCurrentPage(page);
 
-  if (isError) {
-    return (
-      <section className="container flex-1 items-center gap-6 pb-8 pt-6 md:py-10">
-        <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
-          Oh no !
-        </h1>
-        <p className="max-w-[700px] text-lg text-muted-foreground">
-          {error.message || "An internal server error occurred"}
-        </p>
-      </section>
-    );
-  }
+  useEffect(() => {
+    setCurrentPage(1);
+    setTotalPages(Math.ceil(filteredUsers.length / PAGE_SIZE) || 1);
+  }, [search, data]);
+
+  const filteredUsers = data
+    ? data.filter((user: UserType) =>
+        user.username.toLowerCase().includes(search.toLowerCase()),
+      )
+    : [];
+
+  const getPaginatedUsers = () => {
+    const start = (currentPage - 1) * PAGE_SIZE;
+    const end = start + PAGE_SIZE;
+    return filteredUsers.slice(start, end);
+  };
+
+  const generatePageNumbers = () => {
+    const pages = [1];
+
+    const visiblePages = Math.min(totalPages, MAX_VISIBLE_PAGES);
+
+    let startPage = 2;
+    if (currentPage <= 3 || totalPages <= visiblePages) {
+      startPage = 2;
+    } else if (currentPage >= totalPages - 2) {
+      startPage = totalPages - visiblePages + 2;
+    } else {
+      startPage = currentPage - 1;
+    }
+
+    if (startPage > 2) pages.push(-1);
+
+    for (
+      let i = 0;
+      i < visiblePages - 2 && startPage <= totalPages - 1;
+      i++, startPage++
+    ) {
+      pages.push(startPage);
+    }
+
+    if (startPage < totalPages - 1) pages.push(-1);
+
+    if (totalPages > 1) pages.push(totalPages);
+
+    return pages;
+  };
 
   return (
     <section className="container flex-1 items-center gap-6 pb-8 pt-6 md:py-10">
@@ -44,32 +92,56 @@ function UsersIndexComponent() {
         <form>
           <div className="relative">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input placeholder="Search" className="pl-8" />
+            <Input
+              placeholder="Search"
+              className="pl-8"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
           </div>
         </form>
       </div>
-      <div className="flex flex-col gap-2 p-4 pt-0">
-        {data.map((user) => (
-          <Link
-            to="/users/$userId"
-            params={{ userId: user.id }}
-            key={user.id}
-            className="flex p-3 items-center rounded-lg border hover:bg-accent"
-          >
-            <Avatar className="flex h-9 w-9 items-center justify-center space-y-0 border">
-              <AvatarImage src={user.avatar_url} alt="Avatar" />
-              <AvatarFallback>{user.id}</AvatarFallback>
-            </Avatar>
-            <div className="ml-4 space-y-1">
-              <p className="text-sm font-medium leading-none">
-                {user.username}
-              </p>
-              <p className="text-sm text-muted-foreground">{user.email}</p>
-            </div>
-            <div className="ml-auto font-medium">{user.id}</div>
-          </Link>
-        ))}
-      </div>
+      {isLoading && <SkeletonList count={PAGE_SIZE} />}
+      {isError && !isLoading && (
+        <p className="max-w-[700px] text-lg text-muted-foreground">
+          {error instanceof Error ? error.message : "An unknown error occurred"}
+        </p>
+      )}
+      {!isLoading && !isError && filteredUsers.length === 0 && (
+        <p className="max-w-[700px] text-lg text-muted-foreground">
+          No users found matching "{search}"
+        </p>
+      )}
+      {!isLoading && !isError && <UserList users={getPaginatedUsers()} />}
+      {!isLoading && !isError && totalPages > 1 && (
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious onClick={handlePrevPage} href="#" />
+            </PaginationItem>
+            {generatePageNumbers().map((pageNumber, index) => (
+              <React.Fragment key={index}>
+                {pageNumber === -1 ? (
+                  <PaginationEllipsis />
+                ) : (
+                  <PaginationItem>
+                    <PaginationLink
+                      href="#"
+                      onClick={() => handlePageChange(pageNumber)}
+                      isActive={currentPage === pageNumber}
+                    >
+                      {pageNumber}
+                    </PaginationLink>
+                  </PaginationItem>
+                )}
+              </React.Fragment>
+            ))}
+            <PaginationItem>
+              <PaginationNext onClick={handleNextPage} href="#" />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      )}
     </section>
   );
 }

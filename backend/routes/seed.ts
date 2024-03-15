@@ -1,60 +1,26 @@
-import express, { Router, Request, Response } from "express";
 import db from "../db/drizzle";
 import { users } from "../db/schema";
-import { randomInt } from "crypto";
+import axios from "axios";
+import express, { Request, Response, Router } from "express";
+
+type queryType = {
+  id: string;
+  email: string;
+  username: string;
+  avatar_url: string;
+};
 
 const router: Router = express.Router();
 
 router.get("/", async (req: Request, res: Response) => {
-  const { confirm, reset } = req.query;
-
   try {
-    if (confirm !== "true") {
-      return res.status(400).json({
-        confirmation: "http://localhost:3000/api/dev/seed?confirm=true",
-        confirmationAndReset:
-          "http://localhost:3000/api/dev/seed?confirm=true&reset=true",
-      });
-    }
+    await db.delete(users);
 
-    if (reset === "true") {
-      await db.delete(users);
-    }
-
-    const queryUsers = await db.select().from(users);
-    if (queryUsers.length > 0) {
-      return res.status(400).json({
-        message: "The database is already seeded. No action taken.",
-      });
-    }
-
-    const usersData = [
-      {
-        email: "simon.fontaine@example.com",
-        username: "simon",
-        avatar_url: `https://cdn.discordapp.com/embed/avatars/${randomInt(4)}.png`,
-      },
-      {
-        email: "guillaume.ladriere@example.com",
-        username: "guillaume",
-        avatar_url: `https://cdn.discordapp.com/embed/avatars/${randomInt(4)}.png`,
-      },
-      {
-        email: "bastien.patureau@example.com",
-        username: "bastien",
-        avatar_url: `https://cdn.discordapp.com/embed/avatars/${randomInt(4)}.png`,
-      },
-      {
-        email: "timothy.truong@example.com",
-        username: "timothy",
-        avatar_url: `https://cdn.discordapp.com/embed/avatars/${randomInt(4)}.png`,
-      },
-      {
-        email: "maxime.bongartz@example.com",
-        username: "maxime",
-        avatar_url: `https://cdn.discordapp.com/embed/avatars/${randomInt(4)}.png`,
-      },
-    ];
+    const usersData = await axios
+      .get<queryType[]>("https://65eec680ead08fa78a4ee04c.mockapi.io/api/users")
+      .then((res) =>
+        res.data.map((user) => ({ ...user, id: Number(user.id) })),
+      );
 
     await db.insert(users).values(usersData);
 

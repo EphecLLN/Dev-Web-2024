@@ -1,4 +1,4 @@
-// import seedRoutes from "./routes/seed";
+import seedRoutes from "./routes/seed";
 import usersRoutes from "./routes/users";
 import "dotenv/config";
 import express, { Express, Request, Response } from "express";
@@ -11,7 +11,7 @@ app.get("/api/easteregg", (req: Request, res: Response) => {
 });
 
 app.use("/api/users", usersRoutes);
-// app.use("/api/dev/seed", seedRoutes);
+app.use("/api/dev/seed", seedRoutes);
 
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);

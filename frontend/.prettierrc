@@ -5,6 +5,7 @@
   "importOrderCaseInsensitive": true,
   "plugins": [
     "@trivago/prettier-plugin-sort-imports",
-    "prettier-plugin-package"
+    "prettier-plugin-package",
+    "prettier-plugin-tailwindcss"
   ]
 }

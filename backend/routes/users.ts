@@ -36,7 +36,7 @@ router.get("/:userId", async (req: Request, res: Response) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    return res.status(200).json(userQuery);
+    return res.status(200).json(userQuery[0]);
   } catch (error: any) {
     console.error(`Error fetching user with ID ${userId}:`, error);
     return res.status(500).json({ message: "Internal Server Error" });

@@ -6,7 +6,7 @@ export const Route = createFileRoute("/")({
 
 function IndexComponent() {
   return (
-    <section className="container flex-1 items-center gap-6 pb-8 pt-6 md:py-10">
+    <div className="container max-w-screen-2xl flex-1 py-4">
       <div className="flex max-w-[980px] flex-col items-start gap-2">
         <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
           Welcome to MadBrackets
@@ -16,6 +16,6 @@ function IndexComponent() {
           tournaments with ease.
         </p>
       </div>
-    </section>
+    </div>
   );
 }

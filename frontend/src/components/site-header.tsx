@@ -1,40 +1,30 @@
+import { MobileNav } from "./mobile-nav";
 import { buttonVariants } from "./ui/button";
 import { MainNav } from "@/components/main-nav";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { cn } from "@/lib/utils";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-40 w-full border-b bg-background">
-      <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
-        <MainNav
-          items={[
-            {
-              title: "Home",
-              to: "/",
-            },
-            {
-              title: "About",
-              to: "/about",
-            },
-            {
-              title: "Users",
-              to: "/users",
-            },
-          ]}
-        />
-        <div className="flex flex-1 items-center justify-end space-x-4">
-          <nav className="flex items-center space-x-1">
+    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container flex h-14 max-w-screen-2xl items-center">
+        <MainNav />
+        <MobileNav />
+        <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
+          <nav className="flex items-center">
             <a
               href="https://github.com/Bistouflere/Dev-Web-2024"
               target="_blank"
               rel="noreferrer"
             >
               <div
-                className={buttonVariants({
-                  size: "icon",
-                  variant: "ghost",
-                })}
+                className={cn(
+                  buttonVariants({
+                    variant: "ghost",
+                  }),
+                  "w-9 px-0",
+                )}
               >
                 <GitHubLogoIcon className="h-5 w-5" />
                 <span className="sr-only">GitHub</span>

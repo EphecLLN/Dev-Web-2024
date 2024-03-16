@@ -16,7 +16,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Search } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
-const PAGE_SIZE = 8;
+const PAGE_SIZE = 9;
 const MAX_VISIBLE_PAGES = 5;
 
 export const Route = createFileRoute("/users/")({
@@ -84,11 +84,11 @@ function UsersIndexComponent() {
   };
 
   return (
-    <section className="container flex-1 items-center gap-6 pb-8 pt-6 md:py-10">
+    <div className="container max-w-screen-2xl flex-1 py-4">
       <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
         Here is a list of all users registered
       </h1>
-      <div className="p-4">
+      <div className="py-4">
         <form>
           <div className="relative">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -114,7 +114,7 @@ function UsersIndexComponent() {
       )}
       {!isLoading && !isError && <UserList users={getPaginatedUsers()} />}
       {!isLoading && !isError && totalPages > 1 && (
-        <Pagination>
+        <Pagination className="py-4">
           <PaginationContent>
             <PaginationItem>
               <PaginationPrevious onClick={handlePrevPage} href="#" />
@@ -142,6 +142,6 @@ function UsersIndexComponent() {
           </PaginationContent>
         </Pagination>
       )}
-    </section>
+    </div>
   );
 }

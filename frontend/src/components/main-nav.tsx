@@ -1,38 +1,42 @@
 import { cn } from "@/lib/utils";
-import { NavItem } from "@/types/nav";
-import { Link } from "@tanstack/react-router";
+import { Link, useRouterState } from "@tanstack/react-router";
 import { Network } from "lucide-react";
 
-interface MainNavProps {
-  items?: NavItem[];
-}
+export function MainNav() {
+  const router = useRouterState();
 
-export function MainNav({ items }: MainNavProps) {
   return (
-    <div className="flex gap-6 md:gap-10">
-      <Link to="/" className="flex items-center space-x-2">
+    <div className="mr-4 hidden md:flex">
+      <Link to="/" className="mr-6 flex items-center space-x-2">
         <Network className="h-6 w-6" />
-        <span className="inline-block font-bold">MadBrackets</span>
+        <span className="hidden text-base font-bold sm:inline-block">
+          MadBrackets
+        </span>
       </Link>
-      {items?.length ? (
-        <nav className="flex gap-6">
-          {items?.map(
-            (item, index) =>
-              item.to && (
-                <Link
-                  key={index}
-                  to={item.to}
-                  className={cn(
-                    "flex items-center text-sm font-medium text-muted-foreground",
-                    item.disabled && "cursor-not-allowed opacity-80",
-                  )}
-                >
-                  {item.title}
-                </Link>
-              ),
+      <nav className="flex items-center gap-6 text-base">
+        <Link
+          to="/about"
+          className={cn(
+            "transition-colors hover:text-foreground/80",
+            router.location.pathname?.startsWith("/about")
+              ? "text-foreground"
+              : "text-foreground/60",
           )}
-        </nav>
-      ) : null}
+        >
+          About
+        </Link>
+        <Link
+          to="/users"
+          className={cn(
+            "transition-colors hover:text-foreground/80",
+            router.location.pathname?.startsWith("/users")
+              ? "text-foreground"
+              : "text-foreground/60",
+          )}
+        >
+          Users
+        </Link>
+      </nav>
     </div>
   );
 }

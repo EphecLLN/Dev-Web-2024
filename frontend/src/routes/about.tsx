@@ -6,7 +6,7 @@ export const Route = createFileRoute("/about")({
 
 function AboutComponent() {
   return (
-    <section className="container flex-1 items-center gap-6 pb-8 pt-6 md:py-10">
+    <div className="container max-w-screen-2xl flex-1 py-4">
       <div className="flex max-w-[980px] flex-col items-start gap-2">
         <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
           What's MadBrackets ?
@@ -18,6 +18,6 @@ function AboutComponent() {
           laboriosam dolorum alias aut beatae?
         </p>
       </div>
-    </section>
+    </div>
   );
 }

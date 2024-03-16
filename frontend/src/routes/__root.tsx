@@ -1,3 +1,4 @@
+import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { createRootRoute, Outlet } from "@tanstack/react-router";
 import React, { Suspense } from "react";
@@ -21,10 +22,11 @@ const ReactQueryDevtoolsProduction = import.meta.env.PROD
 export const Route = createRootRoute({
   component: () => (
     <>
-      <header>
+      <div className="relative flex min-h-screen flex-col bg-background">
         <SiteHeader />
         <Outlet />
-      </header>
+        <SiteFooter />
+      </div>
       <Suspense fallback={null}>
         <TanStackRouterDevtools />
         <ReactQueryDevtoolsProduction />

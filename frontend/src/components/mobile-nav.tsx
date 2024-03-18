@@ -56,6 +56,18 @@ export function MobileNav() {
             >
               Users
             </Link>
+            <Link
+              to="/dashboard"
+              className={cn(
+                "transition-colors hover:text-foreground/80",
+                router.location.pathname?.startsWith("/dashboard")
+                  ? "text-foreground"
+                  : "text-foreground/60",
+              )}
+              onClick={() => setOpen(false)}
+            >
+              Dashboard
+            </Link>
           </div>
         </ScrollArea>
       </SheetContent>

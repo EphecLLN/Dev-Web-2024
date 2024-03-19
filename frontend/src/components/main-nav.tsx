@@ -1,9 +1,11 @@
 import { cn } from "@/lib/utils";
+import { useAuth0 } from "@auth0/auth0-react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { Network } from "lucide-react";
 
 export function MainNav() {
   const router = useRouterState();
+  const { isAuthenticated } = useAuth0();
 
   return (
     <div className="mr-4 hidden md:flex">
@@ -36,7 +38,7 @@ export function MainNav() {
         >
           Users
         </Link>
-        <Link
+        {isAuthenticated ? <Link
           to="/dashboard"
           className={cn(
             "transition-colors hover:text-foreground/80",
@@ -46,7 +48,7 @@ export function MainNav() {
           )}
         >
           Dashboard
-        </Link>
+        </Link> : null}
       </nav>
     </div>
   );

@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { useAuth0 } from "@auth0/auth0-react";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { Link } from "@tanstack/react-router";
-import { LogIn, LogOut } from "lucide-react";
+import { Fingerprint, LogIn, LogOut } from "lucide-react";
 
 export function SiteHeader() {
   const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
@@ -64,7 +64,7 @@ export function SiteHeader() {
                     "w-9 px-0",
                   )}
                 >
-                  <LogIn />
+                  <Fingerprint />
                   <span className="sr-only">Login</span>
                 </div>
               </Link>

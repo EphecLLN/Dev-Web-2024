@@ -1,3 +1,4 @@
+import { useAuth0 } from "@auth0/auth0-react";
 import { Button } from "./ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import { cn } from "@/lib/utils";
@@ -9,6 +10,8 @@ import { useState } from "react";
 export function MobileNav() {
   const router = useRouterState();
   const [open, setOpen] = useState(false);
+  const { isAuthenticated } = useAuth0();
+
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -56,7 +59,7 @@ export function MobileNav() {
             >
               Users
             </Link>
-            <Link
+            {isAuthenticated ? <Link
               to="/dashboard"
               className={cn(
                 "transition-colors hover:text-foreground/80",
@@ -67,7 +70,8 @@ export function MobileNav() {
               onClick={() => setOpen(false)}
             >
               Dashboard
-            </Link>
+            </Link> : null}
+            
           </div>
         </ScrollArea>
       </SheetContent>

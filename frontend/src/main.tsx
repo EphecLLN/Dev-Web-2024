@@ -45,8 +45,8 @@ if (!rootElement.innerHTML) {
   root.render(
     <React.StrictMode>
       <Auth0Provider
-        domain="tournamentapp.eu.auth0.com"
-        clientId="FsxOm4fzleRo765JkFvqn6iBSC5Grkxk"
+        domain="madbrackets.eu.auth0.com"
+        clientId="KSA5Jk1VwEs1MFZPUckHoBMi4MuODhtO"
         authorizationParams={{
           redirect_uri: window.location.origin,
         }}

@@ -21,9 +21,7 @@ export const SkeletonUserDetails = () => {
         <Card>
           <CardHeader>
             <CardTitle>Main Information</CardTitle>
-            <CardDescription>
               <Skeleton className="h-4 w-[250px]" />
-            </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex flex-col items-center space-y-2">

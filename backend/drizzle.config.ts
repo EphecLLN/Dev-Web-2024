@@ -9,7 +9,7 @@ export default {
     port: 5432,
     user: "postgres",
     password: "password",
-    database: "postgres",
+    database: "tournaments",
   },
   verbose: true,
   strict: true,

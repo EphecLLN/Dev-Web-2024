@@ -35,16 +35,16 @@ function UsersIndexComponent() {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
   const handlePageChange = (page: number) => setCurrentPage(page);
 
-  useEffect(() => {
-    setCurrentPage(1);
-    setTotalPages(Math.ceil(filteredUsers.length / PAGE_SIZE) || 1);
-  }, [search, data]);
-
   const filteredUsers = data
     ? data.filter((user: UserType) =>
         user.username.toLowerCase().includes(search.toLowerCase()),
       )
     : [];
+
+  useEffect(() => {
+    setCurrentPage(1);
+    setTotalPages(Math.ceil(filteredUsers.length / PAGE_SIZE) || 1);
+  }, [search, data, filteredUsers.length]);
 
   const getPaginatedUsers = () => {
     const start = (currentPage - 1) * PAGE_SIZE;

@@ -6,7 +6,7 @@ const client = postgres({
   port: 5432,
   user: "postgres",
   password: "password",
-  database: "postgres",
+  database: "tournaments",
 });
 const db = drizzle(client);
 

@@ -47,6 +47,7 @@ if (!rootElement.innerHTML) {
             clientId="KSA5Jk1VwEs1MFZPUckHoBMi4MuODhtO"
             authorizationParams={{
               redirect_uri: window.location.origin,
+              audience: "http://localhost:3000/api/",
             }}
             useRefreshTokens={true}
             cacheLocation="localstorage"

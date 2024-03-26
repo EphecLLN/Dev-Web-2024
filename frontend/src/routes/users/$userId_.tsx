@@ -8,6 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { SkeletonUserDetails } from "@/components/users/skeleton-user";
+import { useAuth0 } from "@auth0/auth0-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
@@ -27,6 +28,7 @@ export const Route = createFileRoute("/users/$userId")({
 
 function UserComponent() {
   const { userId } = Route.useParams();
+  const { isAuthenticated } = useAuth0()
   const { isLoading, isError, data, error } = useQuery(
     userQueryOptions(userId),
   );
@@ -66,13 +68,14 @@ function UserComponent() {
                   <p className="text-sm text-muted-foreground">{data.email}</p>
                 </div>
                 <div className="mt-4 flex justify-center space-x-4">
-                  <Button onClick={() => console.log("follow", userId)}>
+                  <Button onClick={() => console.log("follow", userId)} disabled={!isAuthenticated}>
                     <Plus className="mr-2 h-5 w-5" />
                     Follow
                   </Button>
                   <Button
                     variant="secondary"
                     onClick={() => console.log("recruit", userId)}
+                    disabled={!isAuthenticated}
                   >
                     <UserPlus className="mr-2 h-5 w-5" />
                     Recruit

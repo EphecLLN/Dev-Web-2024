@@ -28,6 +28,6 @@ export const tournaments = pgTable("tournaments", {
   public: boolean("public"),
   nbrSlot: integer("nbrSlot"),
   teamSize: integer("teamSize"),
-  date: date("date").defaultNow(),
+  date: date("date", { mode: "date" }).defaultNow(),
   loserBracket: boolean("loserBracket"),
 });

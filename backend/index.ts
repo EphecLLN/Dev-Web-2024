@@ -1,4 +1,5 @@
 import seedRoutes from "./routes/seed";
+import tournamentsRoutes from "./routes/tournaments";
 import usersRoutes from "./routes/users";
 import "dotenv/config";
 import express, { Express, Request, Response } from "express";
@@ -16,11 +17,8 @@ app.get("/api/authorized", jwtCheck, (req: Request, res: Response) => {
   res.send("You are authorized!");
 });
 
-app.get("/api/easteregg", (req: Request, res: Response) => {
-  res.json({ message: "Hello World!" });
-});
-
 app.use("/api/users", usersRoutes);
+app.use("/api/tournaments", tournamentsRoutes);
 app.use("/api/dev/seed", seedRoutes);
 
 app.listen(port, () => {

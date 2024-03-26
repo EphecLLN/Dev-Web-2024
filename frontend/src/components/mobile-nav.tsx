@@ -1,7 +1,7 @@
-import { useAuth0 } from "@auth0/auth0-react";
 import { Button } from "./ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import { cn } from "@/lib/utils";
+import { useAuth0 } from "@auth0/auth0-react";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { MenuIcon, Network } from "lucide-react";
@@ -11,7 +11,6 @@ export function MobileNav() {
   const router = useRouterState();
   const [open, setOpen] = useState(false);
   const { isAuthenticated } = useAuth0();
-
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -59,19 +58,32 @@ export function MobileNav() {
             >
               Users
             </Link>
-            {isAuthenticated ? <Link
-              to="/dashboard"
+            <Link
+              to="/tournaments"
               className={cn(
                 "transition-colors hover:text-foreground/80",
-                router.location.pathname?.startsWith("/dashboard")
+                router.location.pathname?.startsWith("/tournaments")
                   ? "text-foreground"
                   : "text-foreground/60",
               )}
               onClick={() => setOpen(false)}
             >
-              Dashboard
-            </Link> : null}
-            
+              Tournaments
+            </Link>
+            {isAuthenticated ? (
+              <Link
+                to="/dashboard"
+                className={cn(
+                  "transition-colors hover:text-foreground/80",
+                  router.location.pathname?.startsWith("/dashboard")
+                    ? "text-foreground"
+                    : "text-foreground/60",
+                )}
+                onClick={() => setOpen(false)}
+              >
+                Dashboard
+              </Link>
+            ) : null}
           </div>
         </ScrollArea>
       </SheetContent>

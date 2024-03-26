@@ -38,17 +38,30 @@ export function MainNav() {
         >
           Users
         </Link>
-        {isAuthenticated ? <Link
-          to="/dashboard"
+        <Link
+          to="/tournaments"
           className={cn(
             "transition-colors hover:text-foreground/80",
-            router.location.pathname?.startsWith("/dashboard")
+            router.location.pathname?.startsWith("/tournaments")
               ? "text-foreground"
               : "text-foreground/60",
           )}
         >
-          Dashboard
-        </Link> : null}
+          Tournaments
+        </Link>
+        {isAuthenticated ? (
+          <Link
+            to="/dashboard"
+            className={cn(
+              "transition-colors hover:text-foreground/80",
+              router.location.pathname?.startsWith("/dashboard")
+                ? "text-foreground"
+                : "text-foreground/60",
+            )}
+          >
+            Dashboard
+          </Link>
+        ) : null}
       </nav>
     </div>
   );

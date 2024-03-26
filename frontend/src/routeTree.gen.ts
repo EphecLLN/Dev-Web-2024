@@ -15,7 +15,9 @@ import { Route as AboutImport } from './routes/about'
 import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as IndexImport } from './routes/index'
 import { Route as UsersIndexImport } from './routes/users/index'
+import { Route as TournamentsIndexImport } from './routes/tournaments/index'
 import { Route as UsersUserIdImport } from './routes/users/$userId_'
+import { Route as TournamentsTournamentIdImport } from './routes/tournaments/$tournamentId_'
 import { Route as AuthenticatedDashboardImport } from './routes/_authenticated/dashboard'
 
 // Create/Update Routes
@@ -40,8 +42,18 @@ const UsersIndexRoute = UsersIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const TournamentsIndexRoute = TournamentsIndexImport.update({
+  path: '/tournaments/',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const UsersUserIdRoute = UsersUserIdImport.update({
   path: '/users/$userId',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const TournamentsTournamentIdRoute = TournamentsTournamentIdImport.update({
+  path: '/tournaments/$tournamentId',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -70,8 +82,16 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardImport
       parentRoute: typeof AuthenticatedImport
     }
+    '/tournaments/$tournamentId': {
+      preLoaderRoute: typeof TournamentsTournamentIdImport
+      parentRoute: typeof rootRoute
+    }
     '/users/$userId': {
       preLoaderRoute: typeof UsersUserIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/tournaments/': {
+      preLoaderRoute: typeof TournamentsIndexImport
       parentRoute: typeof rootRoute
     }
     '/users/': {
@@ -87,7 +107,9 @@ export const routeTree = rootRoute.addChildren([
   IndexRoute,
   AuthenticatedRoute.addChildren([AuthenticatedDashboardRoute]),
   AboutRoute,
+  TournamentsTournamentIdRoute,
   UsersUserIdRoute,
+  TournamentsIndexRoute,
   UsersIndexRoute,
 ])
 

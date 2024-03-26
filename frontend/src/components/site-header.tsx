@@ -6,10 +6,10 @@ import { cn } from "@/lib/utils";
 import { useAuth0 } from "@auth0/auth0-react";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { Link } from "@tanstack/react-router";
-import { Fingerprint, LogIn, LogOut } from "lucide-react";
+import { Fingerprint, LogOut } from "lucide-react";
 
 export function SiteHeader() {
-  const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
+  const { loginWithPopup, logout, isAuthenticated } = useAuth0();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -38,8 +38,10 @@ export function SiteHeader() {
             <ThemeToggle />
             {isAuthenticated ? (
               <Link
-                onClick={() =>
-                  logout({ logoutParams: { returnTo: window.location.origin } })
+                onClick={async () =>
+                  await logout({
+                    logoutParams: { returnTo: window.location.origin },
+                  })
                 }
               >
                 <div
@@ -55,7 +57,7 @@ export function SiteHeader() {
                 </div>
               </Link>
             ) : (
-              <Link onClick={() => loginWithRedirect()}>
+              <Link onClick={async () => await loginWithPopup()}>
                 <div
                   className={cn(
                     buttonVariants({

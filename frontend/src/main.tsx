@@ -1,9 +1,10 @@
+import { InnerApp } from "./app";
 import "./index.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { routeTree } from "@/routeTree.gen";
-import { Auth0Provider, useAuth0 } from "@auth0/auth0-react";
+import { Auth0Provider } from "@auth0/auth0-react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { createRouter, RouterProvider } from "@tanstack/react-router";
+import { createRouter } from "@tanstack/react-router";
 import React from "react";
 import ReactDOM from "react-dom/client";
 
@@ -34,29 +35,26 @@ declare module "@tanstack/react-router" {
   }
 }
 
-function InnerApp() {
-  const auth = useAuth0();
-  return <RouterProvider router={router} context={{ auth }} />;
-}
-
 const rootElement = document.getElementById("root")!;
 if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <React.StrictMode>
-      <Auth0Provider
-        domain="madbrackets.eu.auth0.com"
-        clientId="KSA5Jk1VwEs1MFZPUckHoBMi4MuODhtO"
-        authorizationParams={{
-          redirect_uri: window.location.origin,
-        }}
-      >
-        <QueryClientProvider client={queryClient}>
-          <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-            <InnerApp />
-          </ThemeProvider>
-        </QueryClientProvider>
-      </Auth0Provider>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+          <Auth0Provider
+            domain="madbrackets.eu.auth0.com"
+            clientId="KSA5Jk1VwEs1MFZPUckHoBMi4MuODhtO"
+            authorizationParams={{
+              redirect_uri: window.location.origin,
+            }}
+            useRefreshTokens={true}
+            cacheLocation="localstorage"
+          >
+            <InnerApp router={router} />
+          </Auth0Provider>
+        </ThemeProvider>
+      </QueryClientProvider>
     </React.StrictMode>,
   );
 }

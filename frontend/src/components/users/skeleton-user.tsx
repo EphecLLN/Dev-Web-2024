@@ -1,10 +1,4 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "../ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   ArrowDownRight,
@@ -21,7 +15,7 @@ export const SkeletonUserDetails = () => {
         <Card>
           <CardHeader>
             <CardTitle>Main Information</CardTitle>
-              <Skeleton className="h-4 w-[250px]" />
+            <Skeleton className="h-4 w-[250px]" />
           </CardHeader>
           <CardContent>
             <div className="flex flex-col items-center space-y-2">

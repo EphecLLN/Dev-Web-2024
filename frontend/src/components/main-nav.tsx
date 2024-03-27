@@ -12,7 +12,7 @@ export function MainNav() {
       <Link to="/" className="mr-6 flex items-center space-x-2">
         <Network className="h-6 w-6" />
         <span className="hidden text-base font-bold sm:inline-block">
-          MadBrackets
+          MadBracket
         </span>
       </Link>
       <nav className="flex items-center gap-6 text-base">

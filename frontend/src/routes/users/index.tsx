@@ -1,25 +1,23 @@
 import { usersQueryOptions, UserType } from "@/api/fetchUsers";
+import { MainPagination } from "@/components/main-pagination";
+import { PaginationNav } from "@/components/pagination";
 import { Input } from "@/components/ui/input";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
 import { SkeletonList } from "@/components/users/skeleton-list";
 import { UserList } from "@/components/users/user-list";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { Search } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { z } from "zod";
 
 const PAGE_SIZE = 9;
-const MAX_VISIBLE_PAGES = 5;
+
+const userSearchSchema = z.object({
+  currentPage: z.number().catch(1),
+});
 
 export const Route = createFileRoute("/users/")({
+  validateSearch: userSearchSchema,
   component: UsersIndexComponent,
 });
 
@@ -29,11 +27,11 @@ function UsersIndexComponent() {
   const [totalPages, setTotalPages] = useState(1);
   const { isLoading, isError, data, error } = useQuery(usersQueryOptions);
 
-  const handleNextPage = () =>
+  const onNextPage = () =>
     setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
-  const handlePrevPage = () =>
+  const onPrevPage = () =>
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
-  const handlePageChange = (page: number) => setCurrentPage(page);
+  const onPageChange = (page: number) => setCurrentPage(page);
 
   const filteredUsers = data
     ? data.filter((user: UserType) =>
@@ -50,37 +48,6 @@ function UsersIndexComponent() {
     const start = (currentPage - 1) * PAGE_SIZE;
     const end = start + PAGE_SIZE;
     return filteredUsers.slice(start, end);
-  };
-
-  const generatePageNumbers = () => {
-    const pages = [1];
-
-    const visiblePages = Math.min(totalPages, MAX_VISIBLE_PAGES);
-
-    let startPage = 2;
-    if (currentPage <= 3 || totalPages <= visiblePages) {
-      startPage = 2;
-    } else if (currentPage >= totalPages - 2) {
-      startPage = totalPages - visiblePages + 2;
-    } else {
-      startPage = currentPage - 1;
-    }
-
-    if (startPage > 2) pages.push(-1);
-
-    for (
-      let i = 0;
-      i < visiblePages - 2 && startPage <= totalPages - 1;
-      i++, startPage++
-    ) {
-      pages.push(startPage);
-    }
-
-    if (startPage < totalPages - 1) pages.push(-1);
-
-    if (totalPages > 1) pages.push(totalPages);
-
-    return pages;
   };
 
   return (
@@ -114,33 +81,16 @@ function UsersIndexComponent() {
       )}
       {!isLoading && !isError && <UserList users={getPaginatedUsers()} />}
       {!isLoading && !isError && totalPages > 1 && (
-        <Pagination className="py-4">
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious onClick={handlePrevPage} href="#" />
-            </PaginationItem>
-            {generatePageNumbers().map((pageNumber, index) => (
-              <React.Fragment key={index}>
-                {pageNumber === -1 ? (
-                  <PaginationEllipsis />
-                ) : (
-                  <PaginationItem>
-                    <PaginationLink
-                      href="#"
-                      onClick={() => handlePageChange(pageNumber)}
-                      isActive={currentPage === pageNumber}
-                    >
-                      {pageNumber}
-                    </PaginationLink>
-                  </PaginationItem>
-                )}
-              </React.Fragment>
-            ))}
-            <PaginationItem>
-              <PaginationNext onClick={handleNextPage} href="#" />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+        <MainPagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={onPageChange}
+          onPrevPage={onPrevPage}
+          onNextPage={onNextPage}
+        />
+      )}
+      {!isLoading && !isError && totalPages > 1 && (
+        <PaginationNav route={Route} totalPages={totalPages} />
       )}
     </div>
   );

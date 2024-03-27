@@ -1,4 +1,4 @@
-import { queryOptions } from "@tanstack/react-query";
+import { keepPreviousData, queryOptions } from "@tanstack/react-query";
 import axios from "axios";
 
 export type UserType = {
@@ -12,20 +12,28 @@ export type UserType = {
 
 export class UserNotFoundError extends Error {}
 
-export const usersQueryOptions = queryOptions({
-  queryKey: ["users"],
-  queryFn: () => fetchUsers(),
-});
+export const usersQueryOptions = (query: string, page: number) =>
+  queryOptions({
+    queryKey: ["users", { query, page }],
+    queryFn: () => fetchUsers(query, page),
+    placeholderData: keepPreviousData,
+  });
 
 export const userQueryOptions = (userId: string) =>
   queryOptions({
     queryKey: ["users", { userId }],
     queryFn: () => fetchUser(userId),
+    placeholderData: keepPreviousData,
   });
 
-export async function fetchUsers(): Promise<UserType[]> {
-  console.log("Fetching users...");
-  return axios.get<UserType[]>("/api/users").then((res) => res.data);
+export async function fetchUsers(
+  query: string = "",
+  page: number = 1,
+): Promise<UserType[]> {
+  console.log(`Fetching users with query "${query}" for page ${page}...`);
+  return axios
+    .get<UserType[]>(`/api/users?page=${page}&query=${query}`)
+    .then((res) => res.data);
 }
 
 export async function fetchUser(userId: string): Promise<UserType> {

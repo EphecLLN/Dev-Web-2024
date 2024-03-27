@@ -29,6 +29,7 @@ export function MainNav() {
         </Link>
         <Link
           to="/users"
+          search={{ page: 1, query: "" }}
           className={cn(
             "transition-colors hover:text-foreground/80",
             router.location.pathname?.startsWith("/users")
@@ -40,6 +41,7 @@ export function MainNav() {
         </Link>
         <Link
           to="/tournaments"
+          search={{ page: 1, query: "" }}
           className={cn(
             "transition-colors hover:text-foreground/80",
             router.location.pathname?.startsWith("/tournaments")

@@ -6,111 +6,119 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "@/components/ui/pagination";
-import { Route, useNavigate } from "@tanstack/react-router";
+} from "./ui/pagination";
+import { useNavigate, useSearch } from "@tanstack/react-router";
 
-const generatePagination = (currentPage: number, totalPages: number) => {
-  const pages: (string | number)[] = [1];
-  const visiblePages = Math.min(totalPages, 5);
-  let startPage = 2;
-  if (currentPage <= 3 || totalPages <= visiblePages) {
-    startPage = 2;
-  } else if (currentPage >= totalPages - 2) {
-    startPage = totalPages - visiblePages + 2;
-  } else {
-    startPage = currentPage - 1;
-  }
-  if (startPage > 2) pages.push("...");
-  for (
-    let i = 0;
-    i < visiblePages - 2 && startPage <= totalPages - 1;
-    i++, startPage++
-  ) {
-    pages.push(startPage);
-  }
-  if (startPage < totalPages - 1) pages.push("...");
-  if (totalPages > 1) pages.push(totalPages);
-  return pages;
+export const DOTS = "...";
+
+const range = (start: number, end: number) => {
+  const length = end - start + 1;
+  return Array.from({ length }, (_, idx) => idx + start);
 };
 
-export function PaginationNav({
-  route,
-  totalPages,
-}: {
-  route: Route;
-  totalPages: number;
-}) {
-  const navigate = useNavigate({ from: route.fullPath });
-  const routeSearch = route.useSearch();
-  routeSearch.currentPage = routeSearch.currentPage || 1;
-  const allPages = generatePagination(routeSearch.currentPage, totalPages);
+const generatePagination = (
+  currentPage: number,
+  totalPageCount: number,
+  siblingCount = 1,
+) => {
+  const totalPageNumbers = siblingCount + 5;
 
-  function PaginationNumber({
-    page,
-    isActive,
-    position,
-  }: {
-    page: number | string;
-    position?: "first" | "last" | "middle" | "single";
-    isActive: boolean;
-  }) {
-    return isActive || position === "middle" ? (
-      <PaginationEllipsis />
-    ) : (
-      <PaginationItem>
-        <PaginationLink
-          onClick={() => {
-            navigate({
-              search: { currentPage: page },
-            });
-          }}
-          isActive={isActive}
-        >
-          {page}
-        </PaginationLink>
-      </PaginationItem>
-    );
+  if (totalPageNumbers >= totalPageCount) {
+    return range(1, totalPageCount);
   }
+
+  const leftSiblingIndex = Math.max(currentPage - siblingCount, 1);
+  const rightSiblingIndex = Math.min(
+    currentPage + siblingCount,
+    totalPageCount,
+  );
+  const shouldShowLeftDots = leftSiblingIndex > 2;
+  const shouldShowRightDots = rightSiblingIndex < totalPageCount - 2;
+
+  const firstPageIndex = 1;
+  const lastPageIndex = totalPageCount;
+
+  if (!shouldShowLeftDots && shouldShowRightDots) {
+    const leftItemCount = 3 + 2 * siblingCount;
+    const leftRange = range(1, leftItemCount);
+
+    return [...leftRange, DOTS, totalPageCount];
+  }
+
+  if (shouldShowLeftDots && !shouldShowRightDots) {
+    const rightItemCount = 3 + 2 * siblingCount;
+    const rightRange = range(
+      totalPageCount - rightItemCount + 1,
+      totalPageCount,
+    );
+    return [firstPageIndex, DOTS, ...rightRange];
+  }
+
+  if (shouldShowLeftDots && shouldShowRightDots) {
+    const middleRange = range(leftSiblingIndex, rightSiblingIndex);
+    return [firstPageIndex, DOTS, ...middleRange, DOTS, lastPageIndex];
+  }
+};
+
+export default function UrlPagination({ totalPages }: { totalPages: number }) {
+  const searchParams = useSearch({
+    strict: false,
+  }) as Record<string, string>;
+  const navigate = useNavigate({});
+
+  const currentPage = Number(searchParams.page) || 1;
+  const allPages = generatePagination(currentPage, totalPages);
 
   return (
     <Pagination className="py-4">
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
+            className="cursor-pointer"
             onClick={() => {
               navigate({
-                search: { currentPage: routeSearch.currentPage - 1 },
+                search: {
+                  page: Math.max(currentPage - 1, 1),
+                  query: searchParams.query,
+                },
               });
             }}
           />
         </PaginationItem>
-        {allPages.map((page, index) => {
-          let position: "first" | "last" | "single" | "middle" | undefined;
-
-          if (index === 0) position = "first";
-          if (index === allPages.length - 1) position = "last";
-          if (allPages.length === 1) position = "single";
-          if (page === "...") position = "middle";
+        {allPages!.map((page, index) => {
+          if (page === DOTS) {
+            return <PaginationEllipsis key={index} />;
+          }
 
           return (
-            <PaginationNumber
-              key={page}
-              page={page}
-              position={position}
-              isActive={routeSearch.currentPage === page}
-            />
+            <PaginationItem key={index} className="cursor-pointer">
+              <PaginationLink
+                onClick={() => {
+                  navigate({
+                    search: { page: page, query: searchParams.query },
+                  });
+                }}
+                isActive={currentPage === page}
+              >
+                {page}
+              </PaginationLink>
+            </PaginationItem>
           );
         })}
+        <PaginationItem>
+          <PaginationNext
+            className="cursor-pointer"
+            onClick={() =>
+              navigate({
+                search: {
+                  page: Math.min(currentPage + 1, totalPages),
+                  query: searchParams.query,
+                },
+              })
+            }
+          />
+        </PaginationItem>
       </PaginationContent>
-      <PaginationItem>
-        <PaginationNext
-          onClick={() => {
-            navigate({
-              search: { currentPage: routeSearch.currentPage + 1 },
-            });
-          }}
-        />
-      </PaginationItem>
     </Pagination>
   );
 }

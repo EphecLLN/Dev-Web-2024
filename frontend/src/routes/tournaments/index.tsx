@@ -1,17 +1,26 @@
 import { tournamentsQueryOptions } from "@/api/fetchTournaments";
+import { Search } from "@/components/search";
 import { TournamentList } from "@/components/tournaments/tournament-list";
-import { Input } from "@/components/ui/input";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { Search } from "lucide-react";
-import { useState } from "react";
+
+type TournamentSearch = {
+  page: number;
+  query: string;
+};
 
 export const Route = createFileRoute("/tournaments/")({
+  validateSearch: (search: Record<string, unknown>): TournamentSearch => {
+    return {
+      page: Number(search.page) || 1,
+      query: (search.query as string) || "",
+    };
+  },
   component: TournamentComponent,
 });
 
 function TournamentComponent() {
-  const [search, setSearch] = useState("");
+  const { page, query } = Route.useSearch();
   const { isLoading, isError, data, error } = useQuery(tournamentsQueryOptions);
 
   return (
@@ -19,19 +28,9 @@ function TournamentComponent() {
       <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
         Here is the list of all tournaments
       </h1>
-      <div className="py-4">
-        <form>
-          <div className="relative">
-            <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search"
-              className="pl-8"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          </div>
-        </form>
-      </div>
+
+      <Search placeholder="Search tournaments..." />
+
       {isLoading && <p>Loading...</p>}
       {isError && (
         <p className="max-w-[700px] text-lg text-muted-foreground">
@@ -40,7 +39,7 @@ function TournamentComponent() {
       )}
       {!isLoading && !isError && !data && (
         <p className="max-w-[700px] text-lg text-muted-foreground">
-          No tournaments found matching "{search}"
+          No tournaments found matching "{query}" on page {page}
         </p>
       )}
       {!isLoading && !isError && data && <TournamentList tournaments={data} />}

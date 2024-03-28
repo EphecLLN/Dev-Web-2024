@@ -14,7 +14,10 @@ function Dashboard() {
 
   return (
     isAuthenticated && (
-      <div>
+      <div className="container max-w-screen-2xl flex-1 py-4">
+        <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
+          Your Dashboard
+        </h1>
         <p>name: {user?.name ?? "undefined"}</p>
         <p>given_name: {user?.given_name ?? "undefined"}</p>
         <p>family_name: {user?.family_name ?? "undefined"}</p>

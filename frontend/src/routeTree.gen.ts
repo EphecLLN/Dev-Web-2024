@@ -18,6 +18,8 @@ import { Route as UsersIndexImport } from './routes/users/index'
 import { Route as TournamentsIndexImport } from './routes/tournaments/index'
 import { Route as UsersUserIdImport } from './routes/users/$userId_'
 import { Route as TournamentsTournamentIdImport } from './routes/tournaments/$tournamentId_'
+import { Route as AuthenticatedSettingsImport } from './routes/_authenticated/settings'
+import { Route as AuthenticatedProfileImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedDashboardImport } from './routes/_authenticated/dashboard'
 
 // Create/Update Routes
@@ -57,6 +59,16 @@ const TournamentsTournamentIdRoute = TournamentsTournamentIdImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AuthenticatedSettingsRoute = AuthenticatedSettingsImport.update({
+  path: '/settings',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+
+const AuthenticatedProfileRoute = AuthenticatedProfileImport.update({
+  path: '/profile',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+
 const AuthenticatedDashboardRoute = AuthenticatedDashboardImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRoute,
@@ -82,6 +94,14 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardImport
       parentRoute: typeof AuthenticatedImport
     }
+    '/_authenticated/profile': {
+      preLoaderRoute: typeof AuthenticatedProfileImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/settings': {
+      preLoaderRoute: typeof AuthenticatedSettingsImport
+      parentRoute: typeof AuthenticatedImport
+    }
     '/tournaments/$tournamentId': {
       preLoaderRoute: typeof TournamentsTournamentIdImport
       parentRoute: typeof rootRoute
@@ -105,7 +125,11 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
-  AuthenticatedRoute.addChildren([AuthenticatedDashboardRoute]),
+  AuthenticatedRoute.addChildren([
+    AuthenticatedDashboardRoute,
+    AuthenticatedProfileRoute,
+    AuthenticatedSettingsRoute,
+  ]),
   AboutRoute,
   TournamentsTournamentIdRoute,
   UsersUserIdRoute,

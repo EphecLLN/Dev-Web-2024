@@ -1,15 +1,16 @@
 import { MobileNav } from "./mobile-nav";
 import { buttonVariants } from "./ui/button";
+import { UserMenu } from "./user-menu";
 import { MainNav } from "@/components/main-nav";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
 import { useAuth0 } from "@auth0/auth0-react";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { Link } from "@tanstack/react-router";
-import { Fingerprint, LogOut } from "lucide-react";
+import { LogIn } from "lucide-react";
 
 export function SiteHeader() {
-  const { loginWithPopup, logout, isAuthenticated } = useAuth0();
+  const { loginWithPopup, isAuthenticated } = useAuth0();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -37,25 +38,7 @@ export function SiteHeader() {
             </a>
             <ThemeToggle />
             {isAuthenticated ? (
-              <Link
-                onClick={async () =>
-                  await logout({
-                    logoutParams: { returnTo: window.location.origin },
-                  })
-                }
-              >
-                <div
-                  className={cn(
-                    buttonVariants({
-                      variant: "ghost",
-                    }),
-                    "w-9 px-0",
-                  )}
-                >
-                  <LogOut />
-                  <span className="sr-only">Logout</span>
-                </div>
-              </Link>
+              <UserMenu />
             ) : (
               <Link onClick={async () => await loginWithPopup()}>
                 <div
@@ -66,7 +49,7 @@ export function SiteHeader() {
                     "w-9 px-0",
                   )}
                 >
-                  <Fingerprint />
+                  <LogIn />
                   <span className="sr-only">Login</span>
                 </div>
               </Link>

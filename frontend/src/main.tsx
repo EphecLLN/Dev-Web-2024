@@ -43,11 +43,11 @@ if (!rootElement.innerHTML) {
       <QueryClientProvider client={queryClient}>
         <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
           <Auth0Provider
-            domain="madbrackets.eu.auth0.com"
-            clientId="KSA5Jk1VwEs1MFZPUckHoBMi4MuODhtO"
+            domain={import.meta.env.VITE_AUTH0_DOMAIN!}
+            clientId={import.meta.env.VITE_AUTH0_CLIENT_ID!}
             authorizationParams={{
               redirect_uri: window.location.origin,
-              audience: "http://localhost:3000/api/",
+              audience: import.meta.env.VITE_AUTH0_AUDIENCE,
             }}
             useRefreshTokens={true}
             cacheLocation="localstorage"

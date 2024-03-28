@@ -1,6 +1,8 @@
 import { queryOptions } from "@tanstack/react-query";
 import axios from "axios";
 
+const domain = import.meta.env.VITE_API_URL!;
+
 export type TournamentType = {
   id: string;
   gameId: number;
@@ -28,7 +30,7 @@ export const tournamentQueryOptions = (tournamentId: string) =>
 export async function fetchTournaments(): Promise<TournamentType[]> {
   console.log("Fetching tournaments...");
   return axios
-    .get<TournamentType[]>("/api/tournaments")
+    .get<TournamentType[]>(`${domain}/api/tournaments`)
     .then((res) => res.data);
 }
 
@@ -37,7 +39,7 @@ export async function fetchTournament(
 ): Promise<TournamentType> {
   console.log(`Fetching tournament with id "${tournamentId}"...`);
   const user = await axios
-    .get<TournamentType>(`/api/tournaments/${tournamentId}`)
+    .get<TournamentType>(`${domain}/api/tournaments/${tournamentId}`)
     .then((res) => res.data)
     .catch((error) => {
       if (error.response.status === 404) {

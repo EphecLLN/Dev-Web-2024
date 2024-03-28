@@ -1,6 +1,8 @@
 import { keepPreviousData, queryOptions } from "@tanstack/react-query";
 import axios from "axios";
 
+const domain = import.meta.env.VITE_API_URL!;
+
 export type UserType = {
   id: string;
   email: string;
@@ -32,14 +34,14 @@ export async function fetchUsers(
 ): Promise<UserType[]> {
   console.log(`Fetching users with query "${query}" for page ${page}...`);
   return axios
-    .get<UserType[]>(`/api/users?page=${page}&query=${query}`)
+    .get<UserType[]>(`${domain}/api/users?page=${page}&query=${query}`)
     .then((res) => res.data);
 }
 
 export async function fetchUser(userId: string): Promise<UserType> {
   console.log(`Fetching user with id "${userId}"...`);
   const user = await axios
-    .get<UserType>(`/api/users/${userId}`)
+    .get<UserType>(`${domain}/api/users/${userId}`)
     .then((res) => res.data)
     .catch((error) => {
       if (error.response.status === 404) {

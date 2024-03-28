@@ -14,6 +14,7 @@ type UserSearch = {
 };
 
 const NUMBER_OF_USERS_PER_PAGE = 9;
+const domain = import.meta.env.VITE_API_URL!;
 
 export const Route = createFileRoute("/users/")({
   validateSearch: (search: Record<string, unknown>): UserSearch => {
@@ -27,7 +28,9 @@ export const Route = createFileRoute("/users/")({
 
 async function fetchCount(query: string): Promise<number> {
   console.log(`Fetching users count with query "${query}"...`);
-  const res = await axios.get<number>(`/api/users/count?query=${query}`);
+  const res = await axios.get<number>(
+    `${domain}/api/users/count?query=${query}`,
+  );
   return res.data;
 }
 

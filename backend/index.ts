@@ -6,8 +6,8 @@ import express, { Express, Request, Response } from "express";
 import { auth } from "express-oauth2-jwt-bearer";
 
 const jwtCheck = auth({
-  audience: "http://localhost:3000/api/",
-  issuerBaseURL: "https://madbrackets.eu.auth0.com/",
+  audience: process.env.AUTH0_AUDIENCE!,
+  issuerBaseURL: process.env.AUTH0_ISSUER_BASE_URL!,
 });
 
 const app: Express = express();

@@ -1,6 +1,7 @@
 FROM golang:1.22.3 AS builder
 WORKDIR /app
 COPY ./api .
+RUN apt-get update && apt-get install -y curl
 RUN go build -o api
 
 FROM golang:1.22.3

@@ -69,7 +69,8 @@ func signup(context *gin.Context) {
 	result := initializers.DB.Create(&user)
 	if result.Error != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{
-			"error": "Internal server error"})
+			"error": "Internal server error",
+		})
 		return
 	}
 	context.JSON(http.StatusOK, gin.H{})
@@ -95,6 +96,13 @@ func login(context *gin.Context) {
 
 	var user models.Users
 	var result *gorm.DB
+	if (body.Username == nil) && (body.Email == nil) {
+		context.JSON(http.StatusBadRequest, gin.H{
+			"error": "Invalid request",
+		})
+		return
+	}
+
 	if body.Username == nil {
 		result = initializers.DB.First(&user, "email = ?", body.Email)
 	} else {
@@ -102,9 +110,18 @@ func login(context *gin.Context) {
 	}
 
 	if result.Error != nil {
-		context.JSON(http.StatusBadRequest, gin.H{
-			"error": "Invalid username or email"})
-		return
+		switch result.Error {
+		case gorm.ErrRecordNotFound:
+			context.JSON(http.StatusBadRequest, gin.H{
+				"error": "Invalid username or email",
+			})
+			return
+		default:
+			context.JSON(http.StatusInternalServerError, gin.H{
+				"error": "Internal server error",
+			})
+			return
+		}
 	}
 
 	if bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(body.Password)) != nil {
@@ -155,6 +172,7 @@ func logout(context *gin.Context) {
 		context.JSON(http.StatusBadRequest, gin.H{
 			"error": "Not logged in",
 		})
+		return
 	}
 	context.SetCookie("token", "deleted", 0, "", "", false, true)
 	context.JSON(http.StatusOK, gin.H{})

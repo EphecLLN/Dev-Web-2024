@@ -34,7 +34,7 @@ func setupRouter() *gin.Engine {
 	router := gin.Default()
 	if os.Getenv("profile") != "prod" {
 		router.Use(cors.New(cors.Config{
-			AllowOrigins:     []string{"http://localhost:3000", "https://localeat.ephec-ti.be"}, // Spécifiez votre origine Angular
+			AllowOrigins:     []string{"http://localhost:3000", "https://localeat.ephec-ti.be"},
 			AllowMethods:     []string{"PUT", "PATCH", "GET", "POST", "DELETE"},
 			AllowHeaders:     []string{"Origin", "Content-Type", "Content-Length", "Accept-Encoding", "X-CSRF-Token", "Authorization", "Accept", "Cache-Control", "X-Requested-With", "Set-Cookie"},
 			AllowCredentials: true,
@@ -55,8 +55,8 @@ func setupRouter() *gin.Engine {
 	producers.Routes(router)
 	products.Routes(router)
 	upload.Routes(router)
-	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler)) // The url pointing to API definition
-	router.GET("/ping", func(context *gin.Context) {
+	router.GET("/api/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler)) // The url pointing to API definition
+	router.GET("/ping", func(context *gin.Context) {                              // health check
 		context.String(200, "pong")
 	})
 	return router

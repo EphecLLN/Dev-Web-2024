@@ -1,6 +1,8 @@
 services:
   db:
     image: mysql:8.0.31
+    container_name: db
+    hostname: db
     environment:
       MYSQL_DATABASE: ${DB_NAME}
       MYSQL_USER: ${DB_USER}
@@ -9,5 +11,9 @@ services:
       MYSQL_RANDOM_ROOT_PASSWORD: "no"
     ports:
       - ${DB_PORT}:3306
-    volumes:
-      - ./db:/docker-entrypoint-initdb.d/
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "--silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 0s

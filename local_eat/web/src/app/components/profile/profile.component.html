@@ -1,0 +1,88 @@
+<app-nav></app-nav>
+<div class="container">
+  <div class="row">
+    <!-- Carte Profil -->
+    <div class="col s12 m6">
+      <div class="card blue-grey darken-1">
+          <div class="card-content white-text">
+              <span class="card-title">Profil</span>
+              <!-- Div contenant à la fois l'image et le bouton "Upload Image" -->
+              <div class="upload-container">
+                  <!-- Image de profil -->
+                  <img [src]="'../../../assets/' + user?.profilePictureId + '.jpg'" alt="Photo de profil" style="max-width: 100px; max-height: 100px;">
+                  <!-- Bouton "Upload Image" positionné au centre de l'image -->
+                  <button class="upload-button" (click)="fileInput.click()">Upload Image</button>
+              </div>
+              <p><strong>nom d'utilisateur :</strong> {{ user?.username }}</p>
+              <p><strong>Email :</strong> {{ user?.email }}</p>
+              <p><strong>Email professionel :</strong> {{ producer?.emailPro }}</p>
+              <p><strong>Prénom :</strong> {{ producer?.firstname }}</p>
+              <p><strong>Nom :</strong> {{ producer?.lastname }}</p>
+              <p><strong>Numéro de téléphone :</strong> {{ producer?.phoneNum }}</p>
+
+              
+
+              
+          </div>
+          <div class="card-action">
+              <input type="file" #fileInput style="display: none;">
+              <a href="#">Modifier</a>
+              <a href="#">Supprimer</a>
+          </div>
+          <br>
+      </div>
+    </div>
+    <!-- Carte Compagnie (si l'utilisateur est producteur) -->
+    <ng-container *ngIf="producer">
+      <div class="col s12 m6">
+        <div class="card blue-grey darken-1">
+            <div class="card-content white-text">
+                <span class="card-title">Compagnie</span>
+                <!-- Affichage des informations de la compagnie si elle existe -->
+                <ng-container *ngIf="company">
+                    <p>Nom de la compagnie : {{ company.CompanyName }}</p>
+                    <p>Alias : {{ company.Alias }}</p>
+                    <p>Adresse : {{ company.Address }}</p>
+                    <p>Email : {{ company.Mail }}</p>
+                    <p>Numéro de téléphone : {{ company.PhoneNum }}</p>
+                    <p>Numéro de TVA : {{ company.VATNum }}</p>
+                    <p>Description : {{ company.Description }}</p><br>
+                    <div class="card-action"><a (click)="quitCompany()">Quitter la compagnie</a></div>
+                </ng-container>
+                <!-- Sinon, afficher les options pour créer ou rejoindre une compagnie -->
+                <ng-container *ngIf="!(company) && !showCreateCompanyForm && !showJoinCompanyForm">
+                  <p>Vous n'avez pas encore de compagnie.</p> 
+                  <div><br><br><br><br><br><br><br></div>
+                  <div class="card-action">     
+                    <a (click)="toggleCreateCompanyForm()">Créez-en une maintenant!</a>
+                    <a (click)="toggleJoinCompanyForm()">Rejoindre une compagnie</a>
+                  </div>
+                </ng-container>
+                <!-- Formulaire de création de compagnie -->
+                <form *ngIf="showCreateCompanyForm" (ngSubmit)="createCompany()">
+                    <input type="text" name="CompanyName" placeholder="Nom de la compagnie" [(ngModel)]="CompanyName">
+                    <input type="text" name="Password" placeholder="Mot de passe de la compagnie" [(ngModel)]="Password"> 
+                    <input type="text" name="Alias" placeholder="Alias de la compagnie" [(ngModel)]="Alias">
+                    <input type="text" name="Address" placeholder="Adresse de la compagnie" [(ngModel)]="Address">
+                    <input type="email" name="Mail" placeholder="Email de la compagnie" [(ngModel)]="Mail">
+                    <input type="text" name="PhoneNum" placeholder="Numéro de téléphone de la compagnie" [(ngModel)]="PhoneNum">
+                    <input type="text" name="VATNum" placeholder="Numéro de TVA" [(ngModel)]="VATNum">
+                    <input type="text" name="Description" placeholder="Description de la compagnie" [(ngModel)]="Description">
+                    <button type="submit">Créer</button>
+                    <button type="button" (click)="toggleCreateCompanyForm()">Annuler</button>
+                </form>
+                <!-- Formulaire de rejoindre une compagnie -->
+                <form *ngIf="showJoinCompanyForm" (ngSubmit)="joinCompany()">
+                    <input type="text" name ="CompanyName" placeholder="Nom de la compagnie" [(ngModel)]="CompanyName">
+                    <input type="text" name="Password" placeholder="Mot de passe de la compagnie" [(ngModel)]="Password">
+                    <button type="submit">Rejoindre</button>
+                    <button type="button" (click)="toggleJoinCompanyForm()">Annuler</button>
+                </form>
+            </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+<app-products-management></app-products-management>

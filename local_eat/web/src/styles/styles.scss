@@ -1,0 +1,46 @@
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+body {
+    margin-top: 5%;
+    padding-right: 5%;
+    padding-left: 5%;
+    font-size: larger;
+}
+
+@media screen and (min-width: 800px) {
+    body {
+        padding-right: 15%;
+        padding-left: 15%;
+    }
+}
+
+@media screen and (min-width: 1600px) {
+    body {
+        padding-right: 30%;
+        padding-left: 30%;
+    }
+}
+.custom-search {
+    max-width: 300px;
+
+}
+nav .input-field input[type=search]:focus {
+    border-bottom: 1px solid #000; /* Changez la couleur de la bordure du champ de recherche lorsqu'il est en focus */
+    box-shadow: 0 1px 0 0 #000; /* Changez la couleur de l'ombre du champ de recherche lorsqu'il est en focus */
+}
+
+/* Style pour l'icône de recherche lorsqu'elle est en focus */
+nav .input-field label.icon.is-focused i.material-icons {
+    color: #000 !important; /* Changez la couleur de l'icône de recherche lorsqu'elle est en focus */
+}
+
+/* Style pour le bouton de fermeture de la recherche lorsqu'il est en focus */
+nav .input-field i.material-icons.is-focused {
+    color: #000 !important; /* Changez la couleur de l'icône de fermeture lorsqu'elle est en focus */
+}

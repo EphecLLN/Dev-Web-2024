@@ -1,0 +1,67 @@
+.listesection1{
+    margin: 20px 0px 0px 20px;
+    padding: 0;
+    box-sizing: border-box;
+    font-family:Georgia, 'Times New Roman', Times, serif;
+    width: 500px;
+    height: 400px;
+    background-color:rgba(90, 90, 90, 0.333);
+    box-shadow: 0 .4rem .8rem #0005;
+    border-radius: .8rem;
+    overflow: hidden;
+}
+
+.listeheader1{
+    width: 100%;
+    height: 10%;
+    background-color: #fff4;
+    padding: .8rem 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content:center;
+}
+
+.listebody1{
+    width: 95%;
+    max-height: calc(85% - .8rem);
+    background-color: aliceblue;
+    margin: .8rem auto;
+    border-radius: .6rem;
+    overflow: auto;
+}
+
+.listebody1::-webkit-scrollbar{
+    width: 0.5rem;
+    height: 0.5rem;
+}
+
+.listebody1::-webkit-scrollbar-thumb{
+    border-radius: .5rem;
+    background-color: black;
+}
+
+.listesection1 table, th, td{
+    padding: 1rem;
+    border-collapse: collapse;
+}
+
+.listebody tbody tr:nth-child(even) {
+    background-color: azure;
+}
+
+.listebody1 th{
+    position: relative;
+    top: 0;
+    left: 0;
+    background-color: rgb(195, 195, 195);
+}
+
+.listebody1 tbody tr:hover{
+    background-color: rgb(157, 233, 178);
+}
+
+.inscriptgestion{
+    margin: 20px 0px 0px 20px;
+    border: 1px solid black;
+    width: 500px;
+}

@@ -1,0 +1,36 @@
+.headerdown{
+  background-color: whitesmoke;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.headerup{
+  height: 50px;
+  background-color: #008D42;
+  display: flex;
+  flex-direction: row;
+}
+
+.headerup div ul li{
+  display: inline-block;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+.headerup div ul li img{
+  height: 15px;
+  width: 15px;
+}
+
+a{
+  text-decoration-line: none;
+  color: rgb(0, 0, 0);
+}
+
+a:hover{
+  /*color: rgb(47, 255, 134);
+  text-shadow: 2px 2px black; */
+  /*text-decoration: underline; */
+}

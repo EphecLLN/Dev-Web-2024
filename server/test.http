@@ -1,0 +1,35 @@
+GET http://localhost:8000/users
+
+###
+POST http://localhost:8000/users
+Content-Type: application/json
+
+{
+    "name": "client",
+    "email": "david.addi@yahoo.fr",
+    "password": "abc"
+}
+
+###
+GET http://localhost:8000/users/65e4d900075d7805d13210d4
+
+###
+PATCH http://localhost:8000/users/65e4d900075d7805d13210d4
+Content-Type: application/json
+
+{
+    "name": "rezrz"
+}
+
+###
+DELETE http://localhost:8000/users/65e4e0d5e233b3b2fb669c06
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWYwNzhjMzJhYjg2YjczMWM1ODRhZmQiLCJpYXQiOjE3MTAyNTgzNzQsImV4cCI6MTcxODAzNDM3NH0.c90hAxqSbAu6xeBNNvpp4x5z6NJ4BBoUzqP7IEpn4LE
+
+###
+POST http://localhost:8000/login
+Content-Type: application/json
+
+{
+    "email": "david.addi@yahoo.fr",
+    "password": "abc"
+}

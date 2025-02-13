@@ -1,0 +1,83 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile-web
+    image: local_eat/web
+    container_name: web
+    hostname: web
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      - api
+    volumes:
+      - ./web/build:/usr/share/nginx/html
+      - ./certbot/conf:/etc/letsencrypt/:ro
+      - ./certbot/www:/var/www/certbot/:ro
+    depends_on:
+      api:
+        condition: service_healthy
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt/:rw
+      - ./certbot/www:/var/www/certbot/:rw
+    depends_on:
+      - web
+    command: certonly --webroot -w /var/www/certbot --force-renewal --email m.verbiest@students.ephec.be -d localeat.ephec-ti.be --agree-tos
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile-api
+    image: local_eat/api
+    container_name: api
+    hostname: api
+    restart: always
+    environment:
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+      DB_PORT: 3306
+      DB_HOST: db
+      JWT_KEY: ${JWT_KEY}
+      profile: prod
+    networks:
+      - api
+      - db
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/ping"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+  db:
+    image: mysql:8.0.31
+    container_name: db
+    hostname: db
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASS}
+      MYSQL_ROOT_PASSWORD: ${DB_PASS}
+      MYSQL_RANDOM_ROOT_PASSWORD: "no"
+    networks:
+      - db
+    volumes:
+      - ./db/conf:/etc/mysql/conf.d
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "--silent"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+networks:
+  api:
+  db:

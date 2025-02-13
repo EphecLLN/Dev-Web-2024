@@ -1,0 +1,37 @@
+<div class="container">
+    <div class="row">
+        <form class="col s8 offset-l2" (submit)="registerProducers()">
+            <div class="card-panel" style="height: 75vh; margin-top: 100px;" >
+                <div class="row">
+                    <h4 class="center-align">S'enregistrer en temps que producteur</h4>
+                    <div class="input-field col s12" >
+                        <input placeholder="Nom*" id="Lastname" type="text" class="validate" [(ngModel)]="Lastname" name="Lastname" required>
+                        <label for="Lastname" class="active">*champs obligatoires</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input placeholder="Prénom*" id="Firstname" type="text" class="validate" [(ngModel)]="Firstname" name="Firstname" required>
+                        <label for="Firstname" class="active">*champs obligatoires</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input placeholder="Téléphone*" id="PhoneNum" type="text" class="validate" [(ngModel)]="PhoneNum" name="PhoneNum" required>
+                        <label for="PhoneNum" class="active">*champs obligatoires</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input placeholder="Adresse mail professionnel (exemple@mail.com)" id="EmailPro" type="email" class="validate" [(ngModel)]="EmailPro" name="EmailPro">
+                    </div>
+                </div>
+                <div class="row" class="center-align">
+                    <div class="input-field col s12">
+                        <button class="btn waves-effect waves-light" type="submit" name="action">Devenir producteur</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,35 @@
+<div class="container">
+    <div class="row">
+        <form class="col s8 offset-l2" [formGroup]="loginForm" (ngSubmit)="login()">
+            <div class="card-panel" style="height: 75vh; margin-top: 100px;">
+                <div class="row">
+                    <h4 class="center-align">Se connecter</h4>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input placeholder="Nom d'utilisateur*" id="first_name" type="text" class="validate" [(ngModel)]="username" name="username" formControlName="usernameValid" required>
+                        <label for="first_name" class="active">Nom d'utilisateur ou email *</label>
+                        <div id="first_name_error" class="form-error" *ngIf="loginForm.get('usernameValid')?.touched && !loginForm.get('usernameValid')?.valid">
+                            <div *ngIf="loginForm.get('usernameValid')?.errors?.['required']">Nom d'utilisateur requis</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input placeholder="Mot de passe*" id="password" type="password" class="validate" [(ngModel)]="password" name="password" formControlName="passwordValid" required>
+                        <label for="password" class="active">Mot de passe *</label>
+                        <div id="password_error" class="form-error" *ngIf="loginForm.get('passwordValid')?.touched && !loginForm.get('passwordValid')?.valid">
+                            <div *ngIf="loginForm.get('passwordValid')?.errors?.['required']">Mot de passe requis</div>
+                            <div *ngIf="loginForm.get('passwordValid')?.errors?.['minlength']">Le mot de passe doit être de 8 charactères minimum</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" class="center-align">
+                    <div class="input-field col s12">
+                        <button class="btn waves-effect waves-light" type="submit" name="action" [disabled]="!loginForm.valid">Se connecter</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

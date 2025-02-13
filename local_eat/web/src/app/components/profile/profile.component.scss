@@ -1,0 +1,53 @@
+.upload-image {
+    position: relative;
+    display: inline-block;
+}
+
+.upload-image img {
+    max-width: 100px;
+    max-height: 100px;
+    transition: filter 0.3s ease; /* Ajoute une transition pour une animation fluide */
+}
+
+.upload-image:hover img {
+    filter: brightness(70%); /* Assombrit l'image lorsqu'elle est survolée */
+}
+
+.upload-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    opacity: 0; /* Masque le texte par défaut */
+    transition: opacity 0.3s ease; /* Ajoute une transition pour une animation fluide */
+}
+
+.upload-image:hover .upload-text {
+    opacity: 1; /* Affiche le texte lorsque l'image est survolée */
+}
+.upload-container {
+    position: relative;
+    display: inline-block;
+}
+
+.upload-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px 20px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.upload-container:hover .upload-button {
+    opacity: 1;
+}

@@ -1,0 +1,43 @@
+<nav>
+    <div class="nav-wrapper green">
+        <a href="/" class="brand-logo" style="margin-left: 10px; margin-top: 10px;"><img src="./assets/logo.png"></a>
+
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li>
+                <nav>
+                    <div class="nav-wrapper green">
+                        <form>
+                            <div class="input-field">
+                                <input id="search" type="search" required>
+                                <label class="label-icon" for="search"><i class="material-icons"></i></label>
+                                <i class="material-icons">close</i>
+                            </div>
+                        </form>
+                    </div>
+                </nav>
+            </li>
+            <li *ngIf="isAuthenticated">
+                <a href="/profil">
+                <img src="../../../assets/profil_unknown.jpg" alt="Image de profil" style="width:30px; height: 30px; border-radius: 50%;">
+                </a>
+            </li>
+            <li *ngIf="!isAuthenticated"><a routerLink="/login">Connexion</a></li>
+            <li *ngIf="!isAuthenticated"><a routerLink="/signup">Inscription</a></li>
+            
+        </ul>
+    </div>
+</nav>
+
+<div class="row" style="margin-bottom: 5%;">
+    <div class="col s12">
+        <ul class="tabs" style="overflow: hidden;">
+            <li class="tab col s1"></li>
+            <li class="tab col s2"><a href="producers">Producteurs</a></li>
+            <li class="tab col s2"><a href="products">Produits</a></li>
+            <li class="tab col s2"><a href="recipes">Recettes</a></li>
+            <li class="tab col s2"><a href="news">Actualités</a></li>
+            <li class="tab col s2"></li>
+            <li class="tab col s1"><button (click)="redirectToRegisterProducers()">Devenir producteurs</button></li>
+        </ul>
+    </div>
+</div>

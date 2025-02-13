@@ -1,0 +1,402 @@
+basePath: /api
+definitions:
+  auth.basicAuth:
+    properties:
+      email:
+        example: john_vleminckx@example.com
+        type: string
+      password:
+        example: random_password123
+        type: string
+      username:
+        example: john_vleminckx
+        type: string
+    type: object
+  models.CatalogDetails:
+    properties:
+      Availability:
+        example: true
+        type: boolean
+      CompanyName:
+        example: CompanyTest
+        type: string
+      ProductId:
+        example: "1"
+        type: string
+      Quantity:
+        example: 10
+        type: integer
+      createdAt:
+        example: Mon Jan 2 15:04:05 MST 2006
+        type: string
+      id:
+        example: "1"
+        type: string
+      price:
+        type: number
+    type: object
+  models.Category:
+    properties:
+      description:
+        example: Ceci est une carrotte
+        type: string
+      id:
+        example: CAT1
+        type: string
+      mother_cat:
+        example: CAT2
+        type: string
+      motherCat:
+        $ref: '#/definitions/models.Category'
+      name:
+        example: Legume
+        type: string
+    type: object
+  models.Company:
+    properties:
+      CompanyName:
+        type: string
+      address:
+        type: string
+      alias:
+        type: string
+      catalogDetails:
+        $ref: '#/definitions/models.CatalogDetails'
+      description:
+        type: string
+      mail:
+        type: string
+      password:
+        type: string
+      phoneNum:
+        type: string
+      relCompProd:
+        $ref: '#/definitions/models.RelCompProd'
+      vatnum:
+        type: string
+    type: object
+  models.Producers:
+    properties:
+      emailPro:
+        example: postmaster@example.com
+        type: string
+      firstname:
+        example: John
+        type: string
+      id:
+        example: "1"
+        type: string
+      lastname:
+        example: Vleminckx
+        type: string
+      phoneNum:
+        example: "0483598799"
+        type: string
+      relCompProd:
+        $ref: '#/definitions/models.RelCompProd'
+      username:
+        example: john_vleminckx
+        type: string
+    type: object
+  models.Product:
+    properties:
+      cat:
+        example: CAT1
+        type: string
+      catalogDetails:
+        $ref: '#/definitions/models.CatalogDetails'
+      category:
+        $ref: '#/definitions/models.Category'
+      description:
+        example: A powerful laptop with high-resolution display.
+        type: string
+      id:
+        example: PROD1
+        type: string
+      name:
+        example: Laptop
+        type: string
+      picture:
+        example: image.jpg
+        type: string
+    type: object
+  models.RelCompProd:
+    properties:
+      CompanyName:
+        type: string
+      id:
+        example: "1"
+        type: string
+    type: object
+  models.Users:
+    properties:
+      createdAt:
+        example: Mon Jan 2 15:04:05 MST 2006
+        type: string
+      email:
+        example: mateo@example.com
+        type: string
+      password:
+        example: ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad
+        type: string
+      producer:
+        $ref: '#/definitions/models.Producers'
+      profilePictureId:
+        example: "1524689"
+        type: string
+      username:
+        example: john_vleminckx
+        type: string
+    type: object
+info:
+  contact: {}
+  description: This is a sample server local eat API server.
+  title: local eat API
+  version: "1.0"
+paths:
+  /auth/authenticate:
+    get:
+      description: Validate user token
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User authenticated
+        "401":
+          description: Unauthorized
+      security:
+      - JWT: []
+      summary: Validate user token
+      tags:
+      - Auth
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Send username and password to login to receive a token in a cookie
+      parameters:
+      - description: User data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/auth.basicAuth'
+      responses:
+        "200":
+          description: User authenticated
+        "400":
+          description: Invalid password
+        "500":
+          description: Internal server error
+      summary: Send username and password to login
+      tags:
+      - Auth
+  /auth/logout:
+    delete:
+      description: Modifies token value and sets expiry date to be immediate
+      responses:
+        "200":
+          description: Token deleted successfully
+        "400":
+          description: No token present in request
+      summary: Delete JWT token
+      tags:
+      - Auth
+  /auth/signup:
+    post:
+      consumes:
+      - application/json
+      description: Send user data to create a new user
+      parameters:
+      - description: User data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/auth.basicAuth'
+      responses:
+        "200":
+          description: User created
+        "400":
+          description: Invalid request
+        "500":
+          description: Internal server error
+      summary: Send user data to create a new user
+      tags:
+      - Auth
+  /producers:
+    get:
+      description: Get producers id, name, picture and created values
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Producers'
+            type: array
+        "404":
+          description: Not found
+        "500":
+          description: Internal server error
+      summary: Get producers
+      tags:
+      - Producers
+  /producers/register:
+    post:
+      consumes:
+      - application/json
+      description: Post producer Lastname, Firstname, Phone number and pro email
+      parameters:
+      - description: Producer object to be registered
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.Producers'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Producteur created
+        "400":
+          description: Bad request
+        "500":
+          description: Internal server error
+      security:
+      - JWT: []
+      summary: POST producers
+      tags:
+      - Producers
+  /products:
+    get:
+      description: Get products id, name, picture, category and description
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Product'
+            type: array
+        "404":
+          description: Not found
+        "500":
+          description: Internal server error
+      summary: Get products
+      tags:
+      - Products
+  /users:
+    get:
+      description: Get the user info of the logged in user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Users'
+        "400":
+          description: Bad request
+        "500":
+          description: Internal server error
+      security:
+      - JWT: []
+      summary: Get users
+      tags:
+      - Users
+  /users/create-company:
+    post:
+      description: Create a new company with the necessary info
+      responses:
+        "201":
+          description: Company created
+        "400":
+          description: Bad request
+        "500":
+          description: Internal server error
+      security:
+      - JWT: []
+      summary: Create companies
+      tags:
+      - Company
+  /users/get-company:
+    get:
+      description: Get the companies info of the logged in user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Company'
+        "400":
+          description: Bad request
+        "500":
+          description: Internal server error
+      security:
+      - JWT: []
+      summary: Get companies
+      tags:
+      - Company
+  /users/get-producer:
+    get:
+      description: Get the producer info of the logged in user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Producers'
+        "400":
+          description: Bad request
+        "500":
+          description: Internal server error
+      security:
+      - JWT: []
+      summary: Get producers
+      tags:
+      - Producer
+  /users/join-company:
+    post:
+      description: Join a producer to the selected company
+      responses:
+        "200":
+          description: Company joined successfully
+        "400":
+          description: Bad request
+        "500":
+          description: Internal server error
+      security:
+      - JWT: []
+      summary: Join companies
+      tags:
+      - Producer
+      - Company
+  /users/quit-company:
+    post:
+      description: Unlink a the selected company with the logged in producer
+      responses:
+        "200":
+          description: Company quited successfully
+        "400":
+          description: Bad request
+        "500":
+          description: Internal server error
+      security:
+      - JWT: []
+      summary: Delete company
+      tags:
+      - Producer
+      - Company
+schemes:
+- http
+securityDefinitions:
+  JWT:
+    in: cookie
+    name: token
+    type: apiKey
+swagger: "2.0"

@@ -1,0 +1,6 @@
+<div>
+  <input type="file" (change)="onFileSelected($event)">
+  <span *ngIf="selectedFileName && !uploadStatus" style="color: black;">Fichier sélectionné : {{ selectedFileName }}</span>
+  <span *ngIf="uploadStatus" style="color: black;">{{ uploadStatus }}</span>
+</div>
+<button (click)="uploadFile()">Uploader</button>

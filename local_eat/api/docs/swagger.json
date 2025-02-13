@@ -1,0 +1,615 @@
+{
+    "schemes": [
+        "http"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a sample server local eat API server.",
+        "title": "local eat API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "basePath": "/api",
+    "paths": {
+        "/auth/authenticate": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "Validate user token",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Validate user token",
+                "responses": {
+                    "200": {
+                        "description": "User authenticated"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/auth/login": {
+            "post": {
+                "description": "Send username and password to login to receive a token in a cookie",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Send username and password to login",
+                "parameters": [
+                    {
+                        "description": "User data",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/auth.basicAuth"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User authenticated"
+                    },
+                    "400": {
+                        "description": "Invalid password"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/auth/logout": {
+            "delete": {
+                "description": "Modifies token value and sets expiry date to be immediate",
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Delete JWT token",
+                "responses": {
+                    "200": {
+                        "description": "Token deleted successfully"
+                    },
+                    "400": {
+                        "description": "No token present in request"
+                    }
+                }
+            }
+        },
+        "/auth/signup": {
+            "post": {
+                "description": "Send user data to create a new user",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Send user data to create a new user",
+                "parameters": [
+                    {
+                        "description": "User data",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/auth.basicAuth"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User created"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/producers": {
+            "get": {
+                "description": "Get producers id, name, picture and created values",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Producers"
+                ],
+                "summary": "Get producers",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Producers"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/producers/register": {
+            "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "Post producer Lastname, Firstname, Phone number and pro email",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Producers"
+                ],
+                "summary": "POST producers",
+                "parameters": [
+                    {
+                        "description": "Producer object to be registered",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Producers"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Producteur created"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/products": {
+            "get": {
+                "description": "Get products id, name, picture, category and description",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Get products",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Product"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/users": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "Get the user info of the logged in user",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get users",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Users"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/users/create-company": {
+            "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "Create a new company with the necessary info",
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Create companies",
+                "responses": {
+                    "201": {
+                        "description": "Company created"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/users/get-company": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "Get the companies info of the logged in user",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Get companies",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Company"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/users/get-producer": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "Get the producer info of the logged in user",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Producer"
+                ],
+                "summary": "Get producers",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Producers"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/users/join-company": {
+            "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "Join a producer to the selected company",
+                "tags": [
+                    "Producer",
+                    "Company"
+                ],
+                "summary": "Join companies",
+                "responses": {
+                    "200": {
+                        "description": "Company joined successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/users/quit-company": {
+            "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "Unlink a the selected company with the logged in producer",
+                "tags": [
+                    "Producer",
+                    "Company"
+                ],
+                "summary": "Delete company",
+                "responses": {
+                    "200": {
+                        "description": "Company quited successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "auth.basicAuth": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "john_vleminckx@example.com"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "random_password123"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "john_vleminckx"
+                }
+            }
+        },
+        "models.CatalogDetails": {
+            "type": "object",
+            "properties": {
+                "Availability": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "CompanyName": {
+                    "type": "string",
+                    "example": "CompanyTest"
+                },
+                "ProductId": {
+                    "type": "string",
+                    "example": "1"
+                },
+                "Quantity": {
+                    "type": "integer",
+                    "example": 10
+                },
+                "createdAt": {
+                    "type": "string",
+                    "example": "Mon Jan 2 15:04:05 MST 2006"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "1"
+                },
+                "price": {
+                    "type": "number"
+                }
+            }
+        },
+        "models.Category": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "example": "Ceci est une carrotte"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "CAT1"
+                },
+                "motherCat": {
+                    "$ref": "#/definitions/models.Category"
+                },
+                "mother_cat": {
+                    "type": "string",
+                    "example": "CAT2"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Legume"
+                }
+            }
+        },
+        "models.Company": {
+            "type": "object",
+            "properties": {
+                "CompanyName": {
+                    "type": "string"
+                },
+                "address": {
+                    "type": "string"
+                },
+                "alias": {
+                    "type": "string"
+                },
+                "catalogDetails": {
+                    "$ref": "#/definitions/models.CatalogDetails"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "mail": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "phoneNum": {
+                    "type": "string"
+                },
+                "relCompProd": {
+                    "$ref": "#/definitions/models.RelCompProd"
+                },
+                "vatnum": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Producers": {
+            "type": "object",
+            "properties": {
+                "emailPro": {
+                    "type": "string",
+                    "example": "postmaster@example.com"
+                },
+                "firstname": {
+                    "type": "string",
+                    "example": "John"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "1"
+                },
+                "lastname": {
+                    "type": "string",
+                    "example": "Vleminckx"
+                },
+                "phoneNum": {
+                    "type": "string",
+                    "example": "0483598799"
+                },
+                "relCompProd": {
+                    "$ref": "#/definitions/models.RelCompProd"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "john_vleminckx"
+                }
+            }
+        },
+        "models.Product": {
+            "type": "object",
+            "properties": {
+                "cat": {
+                    "type": "string",
+                    "example": "CAT1"
+                },
+                "catalogDetails": {
+                    "$ref": "#/definitions/models.CatalogDetails"
+                },
+                "category": {
+                    "$ref": "#/definitions/models.Category"
+                },
+                "description": {
+                    "type": "string",
+                    "example": "A powerful laptop with high-resolution display."
+                },
+                "id": {
+                    "type": "string",
+                    "example": "PROD1"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Laptop"
+                },
+                "picture": {
+                    "type": "string",
+                    "example": "image.jpg"
+                }
+            }
+        },
+        "models.RelCompProd": {
+            "type": "object",
+            "properties": {
+                "CompanyName": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "1"
+                }
+            }
+        },
+        "models.Users": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string",
+                    "example": "Mon Jan 2 15:04:05 MST 2006"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "mateo@example.com"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+                },
+                "producer": {
+                    "$ref": "#/definitions/models.Producers"
+                },
+                "profilePictureId": {
+                    "type": "string",
+                    "example": "1524689"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "john_vleminckx"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "JWT": {
+            "type": "apiKey",
+            "name": "token",
+            "in": "cookie"
+        }
+    }
+}
